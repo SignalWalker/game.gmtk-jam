@@ -1,0 +1,24 @@
+; this is the file that tells godot that we wanna load the rust code as an extension
+
+[configuration]
+; this is the symbol that godot will look for when loading the extension
+; (a "symbol" is basically a name for a function exported by a library,
+; so, basically, this is telling godot which function to call to load the library)
+entry_symbol = "gdext_rust_init"
+; minimum version of godot for this extension to work
+compatibility_minimum = 4.7
+; whether the editor should try to reload this extension without restarting when it changes
+reloadable = true
+
+; paths where godot will look for the extension's library file
+; `res://` is the project root
+; these are all named like "gmtk_jam.dll" and "libgmtk_jam.dylib" because "gmtk_jam" is the name of the library (specified in its `Cargo.toml` file)
+[libraries]
+linux.debug.x86_64 = "res://../rs/target/debug/libgmtk_jam.so"
+linux.release.x86_64 = "res://../rs/target/release/libgmtk_jam.so"
+windows.debug.x86_64 = "res://../rs/target/debug/gmtk_jam.dll"
+windows.release.x86_64 = "res://../rs/target/release/gmtk_jam.dll"
+macos.debug = "res://../rs/target/debug/libgmtk_jam.dylib"
+macos.release = "res://../rs/target/release/libgmtk_jam.dylib"
+macos.debug.arm64 = "res://../rs/target/debug/libgmtk_jam.dylib"
+macos.release.arm64 = "res://../rs/target/release/libgmtk_jam.dylib"

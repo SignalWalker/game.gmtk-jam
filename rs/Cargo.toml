@@ -3,4 +3,43 @@ name = "gmtk-jam"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+# tell rustc to compile this as a dynamically linked library, so godot can load it
+crate-type = ["cdylib"]
+
 [dependencies]
+# [--------] the main godot library [--------]
+godot = { version = "^0.5", features = ["api-4-7", "register-docs"] }
+
+# [--------] our own extensions [--------]
+## small utilities
+godot-utils = { git = "https://github.com/SignalWalker/godot.lib.godot-utils" }
+## the scene manager, with some extra utilities
+scene-manager = { git = "https://github.com/SignalWalker/godot.lib.scene-manager-rs.git", version = "^0.1" }
+## a tiny library that helps with logging things to the console
+tracing-godot = { git = "https://github.com/SignalWalker/godot.lib.tracing-godot.git" }
+## dialogue
+dialogue-engine = { git = "https://github.com/SignalWalker/godot.lib.dialogue-engine.git" }
+## integer scaling
+integer-scaling-container = { git = "https://github.com/SignalWalker/godot.lib.integer-scaling-container" }
+
+# [--------] other rust libraries [--------]
+## logging
+tracing = "^0.1"
+tracing-subscriber = { version = "^0.3", features = [
+  "local-time",
+  "parking_lot",
+] }
+## error handling
+thiserror = "^2.0"
+## async code helpers
+futures = "^0.3"
+## linear algebra
+nalgebra = "^0.35"
+
+## emits compiler warnings (FIX :: remove before actual release)
+wip = "^0.2"
+
+[patch.crates-io]
+# use the git master version of the godot lib because it has some nice unreleased features
+godot = { git = "https://github.com/godot-rust/gdext", branch = "master" }

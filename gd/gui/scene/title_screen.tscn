@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://phcufdpflker"]
+
+[sub_resource type="GDScript" id="GDScript_8j5lb"]
+resource_name = "start_button"
+script/source = "extends Button
+
+func _enter_tree() -> void:
+	self.pressed.connect(func() -> void:
+		SceneManager.swap_scene(SceneManagerNode.load_to_node(&\"uid://dqr3v2q11v2iv\"))
+	)
+
+func _ready() -> void:
+	self.grab_focus.call_deferred()
+"
+
+[node name="TitleScreen" type="MarginContainer" unique_id=144219434]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=725407469]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="CenterContainer" unique_id=1636306707]
+layout_mode = 2
+text = "Start"
+script = SubResource("GDScript_8j5lb")
