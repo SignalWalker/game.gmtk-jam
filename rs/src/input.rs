@@ -139,7 +139,7 @@ impl FighterController {
 
     pub fn wants_fastfall(&self) -> bool {
         fn get_strength(v: Vector2) -> f32 {
-            v.dot(Vector2::DOWN).clamp(-1.0, 1.0)
+            (-v).dot(Vector2::DOWN).clamp(-1.0, 1.0)
         }
         let mut frames = self
             .movement_buffer
@@ -150,6 +150,7 @@ impl FighterController {
             return false;
         };
         let strength = get_strength(current);
+
         if strength < self.fastfall_min_strength {
             return false;
         }
