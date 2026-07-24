@@ -147,11 +147,20 @@ impl Fighter2D {
     }
 
     fn movement_input_to_velocity(&self, input: f32) -> Vector2 {
-        Vector2::new(self.walk_speed * input, 0.0)
+        Vector2::new(
+            if input < 0.0 {
+                -self.walk_speed
+            } else {
+                self.walk_speed
+            },
+            0.0,
+        )
     }
 
     fn get_movement_velocity(&self) -> Vector2 {
-        self.movement_input_to_velocity(self.get_movement_input().unwrap_or(0.0))
+        self.get_movement_input()
+            .map(|i| self.movement_input_to_velocity(i))
+            .unwrap_or(Vector2::ZERO)
     }
 
     // [--------] INIT [--------]
@@ -316,7 +325,10 @@ impl Fighter2D {
             return;
         }
 
-        if !self.fastfall && Input::singleton().is_action_just_pressed(AVATAR_DOWN) {
+        if !self.fastfall
+            && Input::singleton().is_action_just_pressed(AVATAR_DOWN)
+            && move_input.is_none_or(|i| i <= self.movement_inner_deadzone)
+        {
             self.fastfall = true;
         }
 
@@ -329,16 +341,24 @@ impl Fighter2D {
             (c_vel.y + (grav.y as f64 * delta) as f32).min(self.terminal_speed)
         };
         let vel = Vector2::new(
-            self.movement_input_to_velocity(move_input.unwrap_or(0.0)).x,
+            move_input
+                .map(|i| self.movement_input_to_velocity(i).x)
+                .unwrap_or(0.0),
             y_vel,
         );
 
         self.base_mut().set_velocity(vel);
         if self.base_mut().move_and_slide() {
-            if move_input.is_some() {
-                self.enter_walking();
-            } else {
-                self.enter_standing();
+            let range = 0..self.base().get_slide_collision_count();
+            for col in range.filter_map(|i| self.base().get_slide_collision(i)) {
+                if col.get_angle() < std::f32::consts::FRAC_PI_3 {
+                    if move_input.is_some() {
+                        self.enter_walking();
+                    } else {
+                        self.enter_standing();
+                    }
+                    break;
+                }
             }
         }
     }

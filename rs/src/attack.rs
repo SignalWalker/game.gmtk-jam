@@ -3,7 +3,8 @@ use godot::{
         Area2D, CharacterBody2D, IArea2D,
         class_macros::private::virtuals::{Xrvrs::Gd, ZipReader::Vector2},
     },
-    prelude::{Base, GodotClass, Node, godot_api},
+    obj::WithUserSignals,
+    prelude::{Base, GodotClass, Node, Node2D, godot_api},
 };
 
 // #[derive(GodotClass)]
@@ -12,8 +13,8 @@ use godot::{
 //     base: Base<Node2D>,
 // }
 
-pub trait Attackable: GodotClass {
-    fn hit(target: &Gd<Self>, attack: &Gd<Attack2D>);
+pub trait Attackable {
+    fn hit(&mut self, attack: &Gd<Attack2D>);
 }
 
 #[derive(GodotClass)]
@@ -33,18 +34,23 @@ pub struct Attack2D {
     /// The number of frames for which targets hit by this attack will be put into hitstun.
     #[export]
     #[var]
-    #[init(val = 0)]
+    #[init(val = 1)]
     pub hitstun_frames: u32,
 
     #[var]
     pub source: Option<Gd<Node>>,
 }
 
+impl Attack2D {
+    fn on_body_entered(attack: Gd<Self>, body: Gd<Node2D>) {
+        if let Ok(mut body) = body.try_dynify::<dyn Attackable>() {
+            body.dyn_bind_mut().hit(&attack);
+        }
+    }
+}
+
 #[godot_api]
 impl Attack2D {
-    #[signal]
-    fn hit();
-
     #[func(virtual, gd_self)]
     pub fn on_hit(
         #[allow(unused_variables)] attack: Gd<Self>,
@@ -54,4 +60,11 @@ impl Attack2D {
 }
 
 #[godot_api]
-impl IArea2D for Attack2D {}
+impl IArea2D for Attack2D {
+    fn enter_tree(&mut self) {
+        self.signals()
+            .body_entered()
+            .builder()
+            .connect_self_gd(Self::on_body_entered);
+    }
+}
