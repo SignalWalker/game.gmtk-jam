@@ -7,7 +7,7 @@ use godot::{
         },
     },
     obj::{NewAlloc, Singleton as _, WithBaseField as _},
-    prelude::{Base, GodotClass, OnReady, godot_api, godot_dyn},
+    prelude::{Base, GodotClass, InstanceId, OnReady, godot_api, godot_dyn},
 };
 
 use crate::attack::{Attack2D, Attackable};
@@ -144,6 +144,8 @@ pub struct Fighter2D {
 
     /// number of frames left of hitstun
     hitstun_frames_remaining: u32,
+    /// if we're in hitstun, this is the id of the attack that caused it
+    hitstun_attack: Option<InstanceId>,
 
     state: PrimaryState,
     facing: FacingDirection,
@@ -152,6 +154,14 @@ pub struct Fighter2D {
 #[godot_dyn]
 impl Attackable for Fighter2D {
     fn hit(&mut self, attack: &Gd<Attack2D>) {
+        let attack_id = attack.instance_id();
+        if let PrimaryState::HitStun = self.state
+            && self.hitstun_attack.is_some_and(|id| id == attack_id)
+        {
+            // ignore attacks that've already hit us
+            return;
+        }
+        self.hitstun_attack = Some(attack_id);
         self.enter_hitstun(
             attack.bind().hitstun_frames,
             attack.bind().get_knockback_adjusted(),
@@ -475,6 +485,7 @@ impl Fighter2D {
         }
 
         if self.hitstun_frames_remaining == 0 {
+            self.hitstun_attack = None;
             self.enter_falling()
         }
     }
@@ -493,7 +504,9 @@ impl ICharacterBody2D for Fighter2D {
                 attack.bind_mut().hitstun_frames = 60;
                 attack.bind_mut().knockback = fighter.hitstun_test_knockback;
                 attack.bind_mut().damage = 0;
-                attack.bind_mut().left = fighter.facing == FacingDirection::Left;
+                if let FacingDirection::Left = fighter.facing {
+                    attack.set_scale(Vector2::new(-1.0, 1.0));
+                }
                 fighter.hit(&attack);
                 attack.free();
             });

@@ -33,7 +33,13 @@ animations = [{
 "speed": 8.0
 }]
 
-[node name="Fireball" type="StaticBody2D" unique_id=756207336]
+[node name="Fireball" type="Attack2D" unique_id=1910041766]
+damage = 12
+knockback = Vector2(64, -128)
+hitstun_frames = 12
+collision_layer = 4
+collision_mask = 2
+monitorable = false
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1197810878]

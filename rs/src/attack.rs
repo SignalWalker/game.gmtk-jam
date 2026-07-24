@@ -1,10 +1,10 @@
 use godot::{
     classes::{
-        Area2D, CharacterBody2D, IArea2D,
+        Area2D, IArea2D,
         class_macros::private::virtuals::{Xrvrs::Gd, ZipReader::Vector2},
     },
-    obj::WithUserSignals,
-    prelude::{Base, GodotClass, Node, Node2D, godot_api},
+    obj::{WithBaseField, WithUserSignals},
+    prelude::{Base, GodotClass, Node, Node2D, Resource, godot_api},
 };
 
 // #[derive(GodotClass)]
@@ -15,6 +15,27 @@ use godot::{
 
 pub trait Attackable {
     fn hit(&mut self, attack: &Gd<Attack2D>);
+}
+
+#[derive(GodotClass)]
+#[class(init, base = Resource)]
+pub struct AttackDefinition {
+    base: Base<Resource>,
+
+    #[export]
+    #[var]
+    pub damage: u32,
+
+    #[export]
+    #[var]
+    #[init(val = Vector2::UP)]
+    pub knockback: Vector2,
+
+    /// The number of frames for which targets hit by this attack will be put into hitstun.
+    #[export]
+    #[var]
+    #[init(val = 1)]
+    pub hitstun_frames: u32,
 }
 
 #[derive(GodotClass)]
@@ -39,25 +60,19 @@ pub struct Attack2D {
 
     #[var]
     pub source: Option<Gd<Node>>,
-
-    #[export]
-    #[var]
-    pub left: bool,
 }
 
 impl Attack2D {
     fn on_body_entered(attack: Gd<Self>, body: Gd<Node2D>) {
+        let body_uncast = body.clone();
         if let Ok(mut body) = body.try_dynify::<dyn Attackable>() {
+            Self::on_hit(attack.clone(), body_uncast);
             body.dyn_bind_mut().hit(&attack);
         }
     }
 
     pub fn get_knockback_adjusted(&self) -> Vector2 {
-        if self.left {
-            Vector2::new(-self.knockback.x, self.knockback.y)
-        } else {
-            self.knockback
-        }
+        (self.knockback * self.base().get_scale()).rotated(self.base().get_rotation())
     }
 }
 
@@ -66,7 +81,7 @@ impl Attack2D {
     #[func(virtual, gd_self)]
     pub fn on_hit(
         #[allow(unused_variables)] attack: Gd<Self>,
-        #[allow(unused_variables)] target: Gd<CharacterBody2D>,
+        #[allow(unused_variables)] target: Gd<Node2D>,
     ) {
     }
 }
