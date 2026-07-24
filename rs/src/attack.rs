@@ -39,12 +39,24 @@ pub struct Attack2D {
 
     #[var]
     pub source: Option<Gd<Node>>,
+
+    #[export]
+    #[var]
+    pub left: bool,
 }
 
 impl Attack2D {
     fn on_body_entered(attack: Gd<Self>, body: Gd<Node2D>) {
         if let Ok(mut body) = body.try_dynify::<dyn Attackable>() {
             body.dyn_bind_mut().hit(&attack);
+        }
+    }
+
+    pub fn get_knockback_adjusted(&self) -> Vector2 {
+        if self.left {
+            Vector2::new(-self.knockback.x, self.knockback.y)
+        } else {
+            self.knockback
         }
     }
 }

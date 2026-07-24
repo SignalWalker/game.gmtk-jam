@@ -54,6 +54,7 @@ _data = {
 metadata/_edit_lock_ = true
 
 [node name="Avatar" parent="." unique_id=741533885 instance=ExtResource("2_naxgx")]
+hitstun_test_knockback = Vector2(-256, -256)
 position = Vector2(182, 274)
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=2070460119]

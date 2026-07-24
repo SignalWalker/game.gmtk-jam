@@ -6,9 +6,11 @@ use godot::{
             ZipReader::{Vector2, real},
         },
     },
-    obj::{Singleton as _, WithBaseField as _},
-    prelude::{Base, GodotClass, OnReady, godot_api},
+    obj::{NewAlloc, Singleton as _, WithBaseField as _},
+    prelude::{Base, GodotClass, OnReady, godot_api, godot_dyn},
 };
+
+use crate::attack::{Attack2D, Attackable};
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum PrimaryState {
@@ -63,6 +65,12 @@ pub const AVATAR_DASH: &str = "avatar_dash";
 pub struct Fighter2D {
     base: Base<CharacterBody2D>,
 
+    #[export]
+    #[init(val = 1000)]
+    pub max_health: u32,
+
+    pub current_health: u32,
+
     /// The minimum input vector length.
     #[export]
     #[init(val = 0.2)]
@@ -80,7 +88,7 @@ pub struct Fighter2D {
 
     /// The fighter's fastfall speed.
     #[export]
-    #[init(val = 1024.0)]
+    #[init(val = 768.0)]
     pub fastfall_speed: real,
 
     /// Initial vertical speed of jumps.
@@ -114,6 +122,15 @@ pub struct Fighter2D {
     #[init(val = 1)]
     pub airdash_count: u32,
 
+    /// Pixels per frame to damp horizontal knockback during hitstun.
+    #[export]
+    #[init(val = 8.0)]
+    pub knockback_horizontal_damping: f32,
+
+    #[export]
+    #[init(val = Vector2::UP * 256.0)]
+    pub hitstun_test_knockback: Vector2,
+
     #[init(node = "%Sprite")]
     sprite: OnReady<Gd<AnimatedSprite2D>>,
 
@@ -125,8 +142,21 @@ pub struct Fighter2D {
 
     fastfall: bool,
 
+    /// number of frames left of hitstun
+    hitstun_frames_remaining: u32,
+
     state: PrimaryState,
     facing: FacingDirection,
+}
+
+#[godot_dyn]
+impl Attackable for Fighter2D {
+    fn hit(&mut self, attack: &Gd<Attack2D>) {
+        self.enter_hitstun(
+            attack.bind().hitstun_frames,
+            attack.bind().get_knockback_adjusted(),
+        );
+    }
 }
 
 impl Fighter2D {
@@ -161,6 +191,12 @@ impl Fighter2D {
         self.get_movement_input()
             .map(|i| self.movement_input_to_velocity(i))
             .unwrap_or(Vector2::ZERO)
+    }
+
+    fn get_velocity_plus_gravity(&mut self, c_vel: Vector2, delta: f64) -> Vector2 {
+        let grav = (self.base().get_gravity().y as f64 * delta) as f32;
+        let g_vel = (grav + c_vel.y).min(self.terminal_speed);
+        Vector2::new(c_vel.x, g_vel)
     }
 
     // [--------] INIT [--------]
@@ -332,22 +368,18 @@ impl Fighter2D {
             self.fastfall = true;
         }
 
-        let y_vel = if self.fastfall {
-            self.fastfall_speed
+        let move_x = move_input
+            .map(|i| self.movement_input_to_velocity(i).x)
+            .unwrap_or(0.0);
+
+        let new_vel = if self.fastfall {
+            Vector2::new(move_x, self.fastfall_speed)
         } else {
-            let grav = self.base().get_gravity();
-
             let c_vel = self.base().get_velocity();
-            (c_vel.y + (grav.y as f64 * delta) as f32).min(self.terminal_speed)
+            self.get_velocity_plus_gravity(Vector2::new(move_x, c_vel.y), delta)
         };
-        let vel = Vector2::new(
-            move_input
-                .map(|i| self.movement_input_to_velocity(i).x)
-                .unwrap_or(0.0),
-            y_vel,
-        );
 
-        self.base_mut().set_velocity(vel);
+        self.base_mut().set_velocity(new_vel);
         if self.base_mut().move_and_slide() {
             let range = 0..self.base().get_slide_collision_count();
             for col in range.filter_map(|i| self.base().get_slide_collision(i)) {
@@ -418,11 +450,54 @@ impl Fighter2D {
             }
         }
     }
+
+    // [--------] HITSTUN [--------]
+
+    fn enter_hitstun(&mut self, frames: u32, knockback: Vector2) {
+        self.state = PrimaryState::HitStun;
+        self.hitstun_frames_remaining = frames;
+        self.base_mut().set_velocity(knockback);
+        self.sprite.play_ex().name("hitstun").done();
+    }
+
+    fn process_hitstun(&mut self, delta: f64) {
+        self.hitstun_frames_remaining = self.hitstun_frames_remaining.saturating_sub(1);
+
+        let c_vel = self.base().get_velocity();
+        let new_x = (c_vel.x.abs() - self.knockback_horizontal_damping)
+            .max(0.0)
+            .copysign(c_vel.x);
+        let new_vel = self.get_velocity_plus_gravity(Vector2::new(new_x, c_vel.y), delta);
+
+        self.base_mut().set_velocity(new_vel);
+        if self.base_mut().move_and_slide() {
+            // TODO :: collisions?
+        }
+
+        if self.hitstun_frames_remaining == 0 {
+            self.enter_falling()
+        }
+    }
 }
 
 #[godot_api]
 impl ICharacterBody2D for Fighter2D {
+    fn enter_tree(&mut self) {
+        self.current_health = self.max_health;
+    }
+
     fn physics_process(&mut self, delta: f64) {
+        if Input::singleton().is_action_just_pressed("hitstun_test") {
+            self.run_deferred(|fighter| {
+                let mut attack = Attack2D::new_alloc();
+                attack.bind_mut().hitstun_frames = 60;
+                attack.bind_mut().knockback = fighter.hitstun_test_knockback;
+                attack.bind_mut().damage = 0;
+                attack.bind_mut().left = fighter.facing == FacingDirection::Left;
+                fighter.hit(&attack);
+                attack.free();
+            });
+        }
         match self.state {
             PrimaryState::Init => self.process_init(delta),
             PrimaryState::Stand => self.process_standing(delta),
@@ -434,7 +509,7 @@ impl ICharacterBody2D for Fighter2D {
             PrimaryState::Jumping => self.process_jumping(delta),
             PrimaryState::Falling => self.process_falling(delta),
             PrimaryState::Sleep => todo!(),
-            PrimaryState::HitStun => todo!(),
+            PrimaryState::HitStun => self.process_hitstun(delta),
         }
     }
 }
