@@ -6,7 +6,7 @@ script/source = "extends Button
 
 func _enter_tree() -> void:
 	self.pressed.connect(func() -> void:
-		SceneManager.swap_scene(SceneManagerNode.load_to_node(&\"uid://dqr3v2q11v2iv\"))
+		SceneManager.swap_scene(SceneManagerNode.load_to_node(&\"uid://bnf8ciupwm4vt\"))
 	)
 
 func _ready() -> void:

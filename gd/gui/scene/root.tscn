@@ -66,6 +66,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = SubResource("GDScript_o0ebj")
 
+[node name="Background" type="ColorRect" parent="." unique_id=594720218]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
 [node name="IntegerScalingContainer" type="IntegerScalingContainer" parent="." unique_id=1484786263]
 base_size = Vector2i(600, 450)
 custom_minimum_size = Vector2(600, 450)
