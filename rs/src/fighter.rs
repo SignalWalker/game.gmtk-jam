@@ -498,19 +498,6 @@ impl ICharacterBody2D for Fighter2D {
     }
 
     fn physics_process(&mut self, delta: f64) {
-        if Input::singleton().is_action_just_pressed("hitstun_test") {
-            self.run_deferred(|fighter| {
-                let mut attack = Attack2D::new_alloc();
-                attack.bind_mut().hitstun_frames = 60;
-                attack.bind_mut().knockback = fighter.hitstun_test_knockback;
-                attack.bind_mut().damage = 0;
-                if let FacingDirection::Left = fighter.facing {
-                    attack.set_scale(Vector2::new(-1.0, 1.0));
-                }
-                fighter.hit(&attack);
-                attack.free();
-            });
-        }
         match self.state {
             PrimaryState::Init => self.process_init(delta),
             PrimaryState::Stand => self.process_standing(delta),

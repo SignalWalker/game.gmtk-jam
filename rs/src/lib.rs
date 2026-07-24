@@ -1,4 +1,4 @@
-extern crate dialogue_engine;
+// extern crate dialogue_engine;
 extern crate integer_scaling_container;
 extern crate scene_manager;
 

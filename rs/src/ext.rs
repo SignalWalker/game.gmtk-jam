@@ -2,7 +2,7 @@
 //!
 //! Explained in more detail [here](https://godot-rust.github.io/book/intro/hello-world.html#rust-entry-point).
 
-use dialogue_engine::ink::InkScriptResourceManager;
+// use dialogue_engine::ink::InkScriptResourceManager;
 use godot::{
     init::{ExtensionLibrary, InitStage, gdextension},
     prelude::godot_error,
@@ -19,9 +19,9 @@ unsafe impl ExtensionLibrary for RoboExt {
         // set up the bridge from rust logs to the game console
         match stage {
             InitStage::Scene => {
-                if let Err(error) = InkScriptResourceManager::register_singleton() {
-                    godot_error!("could not initialize ink resource saver/loader: {error}")
-                }
+                // if let Err(error) = InkScriptResourceManager::register_singleton() {
+                //     godot_error!("could not initialize ink resource saver/loader: {error}")
+                // }
             }
             InitStage::Editor => {
                 tracing_subscriber::registry()
@@ -34,12 +34,12 @@ unsafe impl ExtensionLibrary for RoboExt {
 
     fn on_stage_deinit(stage: InitStage) {
         if let InitStage::Scene = stage {
-            match InkScriptResourceManager::unregister_singleton() {
-                Ok(singleton) => singleton.free(),
-                Err(error) => {
-                    godot_error!("could not unregister ink singleton: {error}");
-                }
-            }
+            // match InkScriptResourceManager::unregister_singleton() {
+            //     Ok(singleton) => singleton.free(),
+            //     Err(error) => {
+            //         godot_error!("could not unregister ink singleton: {error}");
+            //     }
+            // }
         }
     }
 }

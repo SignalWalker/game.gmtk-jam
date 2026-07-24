@@ -7,19 +7,30 @@ edition = "2024"
 # tell rustc to compile this as a dynamically linked library, so godot can load it
 crate-type = ["cdylib"]
 
-[dependencies]
-# [--------] the main godot library [--------]
+
+# web builds
+[target.'cfg(target_family = "wasm")'.dependencies]
+godot = { version = "^0.5", features = [
+  "api-custom",
+  "register-docs",
+  "experimental-wasm",
+  # "lazy-function-tables"
+] }
+
+# non-web builds
+[target.'cfg(not(target_family = "wasm"))'.dependencies]
 godot = { version = "^0.5", features = ["api-4-7", "register-docs"] }
 
+[dependencies]
 # [--------] our own extensions [--------]
 ## small utilities
 godot-utils = { git = "https://github.com/SignalWalker/godot.lib.godot-utils" }
 ## the scene manager, with some extra utilities
-scene-manager = { git = "https://github.com/SignalWalker/godot.lib.scene-manager-rs.git", version = "^0.1" }
+scene-manager = { git = "https://github.com/SignalWalker/godot.lib.scene-manager-rs.git", version = "^0.1", features = [
+  "api-4-7",
+] }
 ## a tiny library that helps with logging things to the console
 tracing-godot = { git = "https://github.com/SignalWalker/godot.lib.tracing-godot.git" }
-## dialogue
-dialogue-engine = { git = "https://github.com/SignalWalker/godot.lib.dialogue-engine.git" }
 ## integer scaling
 integer-scaling-container = { git = "https://github.com/SignalWalker/godot.lib.integer-scaling-container" }
 
