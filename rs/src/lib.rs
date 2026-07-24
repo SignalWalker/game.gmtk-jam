@@ -6,3 +6,5 @@ mod ext;
 pub use ext::*;
 
 pub mod fighter;
+
+pub mod attack;

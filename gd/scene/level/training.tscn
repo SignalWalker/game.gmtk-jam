@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bnf8ciupwm4vt"]
 
+[ext_resource type="PackedScene" uid="uid://1svy2wscsuk1" path="res://scene/attack/fireball.tscn" id="2_gnh3c"]
 [ext_resource type="PackedScene" uid="uid://b15d0or3erbra" path="res://scene/character/avatar.tscn" id="2_naxgx"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_naxgx"]
@@ -10,7 +11,47 @@ normal = Vector2(1, 0)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gnh3c"]
 normal = Vector2(-1, 0)
 
+[sub_resource type="Animation" id="Animation_naxgx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fireball:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wvtyy"]
+resource_name = "attack_test"
+length = 4.000001875283011
+loop_mode = 1
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Fireball:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.0000001, 2.0000017, 3.000002, 4.000002),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-46, 130), Vector2(-210, 74), Vector2(-174, -29), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_naxgx"]
+_data = {
+&"RESET": SubResource("Animation_naxgx"),
+&"attack_test": SubResource("Animation_wvtyy")
+}
+
 [node name="Training" type="Node2D" unique_id=134973433]
+metadata/_edit_lock_ = true
 
 [node name="Avatar" parent="." unique_id=741533885 instance=ExtResource("2_naxgx")]
 position = Vector2(182, 274)
@@ -18,12 +59,14 @@ position = Vector2(182, 274)
 [node name="Floor" type="StaticBody2D" parent="." unique_id=2070460119]
 position = Vector2(0, 450)
 metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1342127751]
 shape = SubResource("WorldBoundaryShape2D_naxgx")
 
 [node name="WallLeft" type="StaticBody2D" parent="." unique_id=1342741719]
 metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WallLeft" unique_id=1979473559]
 shape = SubResource("WorldBoundaryShape2D_wvtyy")
@@ -31,6 +74,23 @@ shape = SubResource("WorldBoundaryShape2D_wvtyy")
 [node name="WallRight" type="StaticBody2D" parent="." unique_id=1468207171]
 position = Vector2(600, 0)
 metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight" unique_id=1663028339]
 shape = SubResource("WorldBoundaryShape2D_gnh3c")
+
+[node name="AttackTest" type="Node2D" parent="." unique_id=1371300542]
+position = Vector2(301, 318)
+metadata/_edit_group_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AttackTest" unique_id=1250432377]
+deterministic = true
+root_motion_local = true
+callback_mode_process = 0
+callback_mode_method = 1
+libraries/ = SubResource("AnimationLibrary_naxgx")
+autoplay = &"attack_test"
+
+[node name="Fireball" parent="AttackTest" unique_id=756207336 instance=ExtResource("2_gnh3c")]
+collision_layer = 4
+collision_mask = 0

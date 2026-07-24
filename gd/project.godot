@@ -76,6 +76,7 @@ avatar_dash={
 
 2d_physics/layer_1="World"
 2d_physics/layer_2="Character"
+2d_physics/layer_3="Attack"
 
 [physics]
 
