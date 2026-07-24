@@ -1,16 +1,19 @@
 use godot::{
     classes::{
-        AnimatedSprite2D, CharacterBody2D, ICharacterBody2D, Input,
+        AnimatedSprite2D, CharacterBody2D, ICharacterBody2D,
         class_macros::private::virtuals::{
             Xrvrs::Gd,
             ZipReader::{Vector2, real},
         },
     },
-    obj::{NewAlloc, Singleton as _, WithBaseField as _},
+    obj::{Singleton as _, WithBaseField as _},
     prelude::{Base, GodotClass, InstanceId, OnReady, godot_api, godot_dyn},
 };
 
-use crate::attack::{Attack2D, Attackable};
+use crate::{
+    attack::{Attack2D, Attackable},
+    input::{Action, FighterController},
+};
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum PrimaryState {
@@ -54,11 +57,6 @@ impl FacingDirection {
         }
     }
 }
-
-pub const AVATAR_UP: &str = "avatar_move_up";
-pub const AVATAR_DOWN: &str = "avatar_move_down";
-pub const AVATAR_JUMP: &str = "avatar_jump";
-pub const AVATAR_DASH: &str = "avatar_dash";
 
 #[derive(GodotClass)]
 #[class(init, base = CharacterBody2D)]
@@ -127,12 +125,10 @@ pub struct Fighter2D {
     #[init(val = 8.0)]
     pub knockback_horizontal_damping: f32,
 
-    #[export]
-    #[init(val = Vector2::UP * 256.0)]
-    pub hitstun_test_knockback: Vector2,
-
     #[init(node = "%Sprite")]
     sprite: OnReady<Gd<AnimatedSprite2D>>,
+
+    controller: Option<Gd<FighterController>>,
 
     /// how many air jumps we have left
     jumps_remaining: u32,
@@ -170,23 +166,18 @@ impl Attackable for Fighter2D {
 }
 
 impl Fighter2D {
-    /// Negative: Left, Positive: Right
-    fn raw_movement_input() -> real {
-        const AVATAR_LEFT: &str = "avatar_move_left";
-        const AVATAR_RIGHT: &str = "avatar_move_right";
-        godot::classes::Input::singleton().get_axis(AVATAR_LEFT, AVATAR_RIGHT)
+    pub fn register_controller(&mut self, controller: Gd<FighterController>) {
+        self.controller = Some(controller);
     }
 
-    fn get_movement_input(&self) -> Option<real> {
-        let input = Self::raw_movement_input();
-        if input.abs() < self.movement_inner_deadzone {
-            None
-        } else {
-            Some(input)
-        }
+    fn get_horizontal_input(&self) -> Option<real> {
+        self.controller
+            .as_ref()
+            .and_then(|c| c.bind().current_movement())
+            .map(|v| v.x)
     }
 
-    fn movement_input_to_velocity(&self, input: f32) -> Vector2 {
+    fn horizontal_movement_to_velocity(&self, input: f32) -> Vector2 {
         Vector2::new(
             if input < 0.0 {
                 -self.walk_speed
@@ -197,9 +188,9 @@ impl Fighter2D {
         )
     }
 
-    fn get_movement_velocity(&self) -> Vector2 {
-        self.get_movement_input()
-            .map(|i| self.movement_input_to_velocity(i))
+    fn get_horizontal_velocity(&self) -> Vector2 {
+        self.get_horizontal_input()
+            .map(|i| self.horizontal_movement_to_velocity(i))
             .unwrap_or(Vector2::ZERO)
     }
 
@@ -207,6 +198,24 @@ impl Fighter2D {
         let grav = (self.base().get_gravity().y as f64 * delta) as f32;
         let g_vel = (grav + c_vel.y).min(self.terminal_speed);
         Vector2::new(c_vel.x, g_vel)
+    }
+
+    fn consume_action(&mut self) -> Option<Action> {
+        self.controller
+            .as_mut()
+            .and_then(|c| c.bind_mut().consume_action())
+    }
+
+    fn should_maintain_jump(&self) -> bool {
+        self.controller
+            .as_ref()
+            .is_some_and(|c| c.bind().maintaining_jump)
+    }
+
+    fn wants_fastfall(&self) -> bool {
+        self.controller
+            .as_ref()
+            .is_some_and(|c| c.bind().wants_fastfall())
     }
 
     // [--------] INIT [--------]
@@ -225,12 +234,18 @@ impl Fighter2D {
         self.jumps_remaining = self.air_jump_count;
     }
 
-    fn process_standing(&mut self, _delta: f64) {
-        if Input::singleton().is_action_pressed(AVATAR_JUMP) {
-            self.enter_jumping();
-        } else if let Some(input) = self.get_movement_input() {
-            self.facing = FacingDirection::from_input(input);
-            self.enter_walking();
+    fn process_standing(&mut self, delta: f64) {
+        match self.consume_action() {
+            Some(Action::Jump) => {
+                self.enter_jumping();
+                self.process_jumping(delta);
+            }
+            _ => {
+                if self.get_horizontal_input().is_some() {
+                    self.enter_walking();
+                    self.process_walking(delta);
+                }
+            }
         }
     }
 
@@ -253,29 +268,34 @@ impl Fighter2D {
     }
 
     fn process_walking(&mut self, delta: f64) {
-        if Input::singleton().is_action_pressed(AVATAR_JUMP) {
-            self.enter_jumping();
-            return;
-        }
-        if let Some(input) = self.get_movement_input() {
-            self.process_walking_with_input(delta, input);
-        } else {
+        // get input
+        let Some(input) = self.get_horizontal_input() else {
             self.enter_standing();
-        }
-    }
+            self.process_standing(delta);
+            return;
+        };
 
-    fn process_walking_with_input(&mut self, delta: f64, input: f32) {
-        self.facing = FacingDirection::from_input(input);
         // update anim
         self.update_walk_anim();
 
-        if Input::singleton().is_action_just_pressed(AVATAR_DASH) {
-            self.enter_ground_dash();
-            self.process_ground_dash(delta);
-            return;
+        // check for actions
+        match self.consume_action() {
+            Some(Action::Jump) => {
+                self.enter_jumping();
+                self.process_jumping(delta);
+                return;
+            }
+            Some(Action::Dash) => {
+                self.enter_ground_dash();
+                self.process_ground_dash(delta);
+                return;
+            }
+            _ => {}
         }
 
-        let vel = self.movement_input_to_velocity(input);
+        // no actions, we're walking
+
+        let vel = self.horizontal_movement_to_velocity(input);
         self.base_mut().set_velocity(vel);
         if self.base_mut().move_and_slide() {
             // TODO :: handle collisions
@@ -303,37 +323,40 @@ impl Fighter2D {
             fighter.enter_falling();
         }
 
-        if !Input::singleton().is_action_pressed(AVATAR_JUMP) {
-            return start_falling(self);
+        let move_input = self.get_horizontal_input();
+
+        #[allow(clippy::single_match)]
+        match self.consume_action() {
+            Some(Action::Dash) =>
+            {
+                #[allow(clippy::collapsible_match)]
+                if self.jumps_remaining >= 1 && move_input.is_some() {
+                    self.jumps_remaining -= 1;
+                    self.enter_airdash();
+                    self.process_airdash(delta);
+                    return;
+                }
+            }
+            _ => {}
         }
 
-        let move_input = self.get_movement_input();
-
-        if self.jumps_remaining >= 1
-            && Input::singleton().is_action_just_pressed(AVATAR_DASH)
-            && let Some(move_input) = move_input
-        {
-            self.jumps_remaining -= 1;
-            self.facing = FacingDirection::from_input(move_input);
-            self.enter_airdash();
-            self.process_airdash(delta);
+        if !self.should_maintain_jump() {
+            start_falling(self);
+            self.process_falling(delta);
             return;
         }
-
-        // self.jump_countdown = self.jump_countdown.saturating_sub(1);
-        // if self.jump_countdown == 0 {
-        //     return start_falling(self);
-        // }
 
         let grav_y = (self.base().get_gravity().y as f64 * delta) as f32;
         let c_vel_y = self.base().get_velocity().y;
         let vel_y = c_vel_y + grav_y;
 
         if vel_y >= 0.0 {
-            return start_falling(self);
+            start_falling(self);
+            self.process_falling(delta);
+            return;
         }
 
-        let move_vel = self.get_movement_velocity();
+        let move_vel = self.get_horizontal_velocity();
         self.base_mut()
             .set_velocity(Vector2::new(move_vel.x, vel_y));
         if self.base_mut().move_and_slide() {
@@ -351,35 +374,36 @@ impl Fighter2D {
     }
 
     fn process_falling(&mut self, delta: f64) {
-        if self.jumps_remaining >= 1 && Input::singleton().is_action_just_pressed(AVATAR_JUMP) {
-            self.jumps_remaining -= 1;
-            self.enter_jumping();
-            self.process_jumping(delta);
-            return;
+        let move_input = self.get_horizontal_input();
+        match self.consume_action() {
+            Some(Action::Dash) => {
+                if self.jumps_remaining >= 1 && move_input.is_some() {
+                    self.jumps_remaining -= 1;
+                    self.enter_airdash();
+                    self.process_airdash(delta);
+                    return;
+                }
+            }
+            Some(Action::Jump) =>
+            {
+                #[allow(clippy::collapsible_match)]
+                if self.jumps_remaining >= 1 {
+                    self.jumps_remaining -= 1;
+                    self.enter_jumping();
+                    self.process_jumping(delta);
+                    return;
+                }
+            }
+            _ => {}
         }
 
-        let move_input = self.get_movement_input();
-
-        if self.jumps_remaining >= 1
-            && Input::singleton().is_action_just_pressed(AVATAR_DASH)
-            && let Some(move_input) = move_input
-        {
-            self.jumps_remaining -= 1;
-            self.facing = FacingDirection::from_input(move_input);
-            self.enter_airdash();
-            self.process_airdash(delta);
-            return;
-        }
-
-        if !self.fastfall
-            && Input::singleton().is_action_just_pressed(AVATAR_DOWN)
-            && move_input.is_none_or(|i| i <= self.movement_inner_deadzone)
-        {
+        // check for fastfall
+        if !self.fastfall && self.wants_fastfall() {
             self.fastfall = true;
         }
 
         let move_x = move_input
-            .map(|i| self.movement_input_to_velocity(i).x)
+            .map(|i| self.horizontal_movement_to_velocity(i).x)
             .unwrap_or(0.0);
 
         let new_vel = if self.fastfall {
@@ -391,17 +415,38 @@ impl Fighter2D {
 
         self.base_mut().set_velocity(new_vel);
         if self.base_mut().move_and_slide() {
-            let range = 0..self.base().get_slide_collision_count();
-            for col in range.filter_map(|i| self.base().get_slide_collision(i)) {
-                if col.get_angle() < std::f32::consts::FRAC_PI_3 {
-                    if move_input.is_some() {
-                        self.enter_walking();
-                    } else {
-                        self.enter_standing();
-                    }
-                    break;
-                }
+            // we collided with something, so iterate through collisions to see if we hit a floor
+            if self.collided_with_floor() {
+                self.enter_standing_or_walking(move_input);
             }
+        }
+    }
+
+    fn enter_standing_or_walking(&mut self, input: Option<real>) {
+        if input.is_some() {
+            self.enter_walking()
+        } else {
+            self.enter_standing()
+        }
+    }
+
+    fn collided_with_floor(&self) -> bool {
+        let range = 0..self.base().get_slide_collision_count();
+        for col in range.filter_map(|i| self.base().get_slide_collision(i)) {
+            // did we hit a floor?
+            if col.get_angle() < std::f32::consts::FRAC_PI_3 {
+                // we hit a floor...
+                return true;
+            }
+        }
+        false
+    }
+
+    fn enter_standing_walking_or_falling(&mut self, collided: bool, move_input: Option<real>) {
+        if collided && self.collided_with_floor() {
+            self.enter_standing_or_walking(move_input)
+        } else {
+            self.enter_falling()
         }
     }
 
@@ -422,12 +467,11 @@ impl Fighter2D {
 
         let vel = self.facing.to_vec() * self.airdash_speed;
         self.base_mut().set_velocity(vel);
-        if self.base_mut().move_and_slide() {
-            // TODO :: collision
-        }
+        let collided = self.base_mut().move_and_slide();
 
         if self.dash_frames_remaining == 0 {
-            self.enter_falling();
+            // TODO :: dash attack
+            self.enter_standing_walking_or_falling(collided, self.get_horizontal_input());
         }
     }
 
@@ -448,16 +492,11 @@ impl Fighter2D {
 
         let vel = self.facing.to_vec() * self.ground_dash_speed;
         self.base_mut().set_velocity(vel);
-        if self.base_mut().move_and_slide() {
-            // TODO :: collision
-        }
+        let collided = self.base_mut().move_and_slide();
 
         if self.dash_frames_remaining == 0 {
-            if self.get_movement_input().is_some() {
-                self.enter_walking();
-            } else {
-                self.enter_standing();
-            }
+            // TODO :: dash attack
+            self.enter_standing_walking_or_falling(collided, self.get_horizontal_input());
         }
     }
 
@@ -480,13 +519,11 @@ impl Fighter2D {
         let new_vel = self.get_velocity_plus_gravity(Vector2::new(new_x, c_vel.y), delta);
 
         self.base_mut().set_velocity(new_vel);
-        if self.base_mut().move_and_slide() {
-            // TODO :: collisions?
-        }
+        let collided = self.base_mut().move_and_slide();
 
         if self.hitstun_frames_remaining == 0 {
             self.hitstun_attack = None;
-            self.enter_falling()
+            self.enter_standing_walking_or_falling(collided, self.get_horizontal_input());
         }
     }
 }
@@ -498,6 +535,12 @@ impl ICharacterBody2D for Fighter2D {
     }
 
     fn physics_process(&mut self, delta: f64) {
+        // update facing
+        let horiz = self.get_horizontal_input();
+        if let Some(horiz) = horiz {
+            self.facing = FacingDirection::from_input(horiz);
+        }
+
         match self.state {
             PrimaryState::Init => self.process_init(delta),
             PrimaryState::Stand => self.process_standing(delta),
