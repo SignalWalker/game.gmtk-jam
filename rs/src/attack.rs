@@ -18,27 +18,6 @@ pub trait Attackable {
 }
 
 #[derive(GodotClass)]
-#[class(init, base = Resource)]
-pub struct AttackDefinition {
-    base: Base<Resource>,
-
-    #[export]
-    #[var]
-    pub damage: u32,
-
-    #[export]
-    #[var]
-    #[init(val = Vector2::UP)]
-    pub knockback: Vector2,
-
-    /// The number of frames for which targets hit by this attack will be put into hitstun.
-    #[export]
-    #[var]
-    #[init(val = 1)]
-    pub hitstun_frames: u32,
-}
-
-#[derive(GodotClass)]
 #[class(init, base = Area2D)]
 pub struct Attack2D {
     base: Base<Area2D>,
@@ -57,6 +36,12 @@ pub struct Attack2D {
     #[var]
     #[init(val = 1)]
     pub hitstun_frames: u32,
+
+    /// The number of iframes this attack will cause on hit
+    #[export]
+    #[var]
+    #[init(val = 0)]
+    pub invincibility_frames: u32,
 
     #[var]
     pub source: Option<Gd<Node>>,

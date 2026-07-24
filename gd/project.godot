@@ -28,7 +28,7 @@ window/size/viewport_width=600
 window/size/viewport_height=450
 window/size/sharp_corners=true
 window/stretch/aspect="ignore"
-window/vsync/vsync_mode=2
+window/vsync/vsync_mode=0
 
 [editor]
 
@@ -100,6 +100,7 @@ common/physics_interpolation=true
 
 [rendering]
 
+rendering_device/vsync/swapchain_image_count=2
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 textures/default_filters/use_nearest_mipmap_filter=true

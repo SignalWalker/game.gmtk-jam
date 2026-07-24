@@ -98,28 +98,43 @@ pub struct FighterController {
 
     pub maintaining_jump: bool,
 
+    frame_count: u64,
+
     action: Option<QueuedAction>,
 }
 
 impl FighterController {
-    pub fn current_movement(&self) -> Option<Vector2> {
-        let res = AnalogMovementFrame::capture(
-            self.movement_deadzone,
-            AVATAR_LEFT,
-            AVATAR_RIGHT,
-            AVATAR_UP,
-            AVATAR_DOWN,
-        )
-        .0;
-        if res.is_zero_approx() {
+    pub fn current_horizontal(&self) -> Option<real> {
+        let res = Input::singleton().get_axis(AVATAR_LEFT, AVATAR_RIGHT);
+        if res.abs() <= self.movement_deadzone {
             None
         } else {
             Some(res)
         }
     }
 
+    // pub fn current_movement(&self) -> Option<Vector2> {
+    //     let res = AnalogMovementFrame::capture(
+    //         self.movement_deadzone,
+    //         AVATAR_LEFT,
+    //         AVATAR_RIGHT,
+    //         AVATAR_UP,
+    //         AVATAR_DOWN,
+    //     )
+    //     .0;
+    //     if res.is_zero_approx() {
+    //         None
+    //     } else {
+    //         Some(res)
+    //     }
+    // }
+
+    pub fn peek_action(&self) -> Option<Action> {
+        self.action.as_ref().map(|f| f.kind)
+    }
+
     pub fn consume_action(&mut self) -> Option<Action> {
-        self.action.take().map(|a| a.kind)
+        self.action.take().map(|f| f.kind)
     }
 
     pub fn wants_fastfall(&self) -> bool {
@@ -173,6 +188,8 @@ impl INode for FighterController {
             self.base_mut().set_physics_process_priority(-1);
         }
 
+        Input::singleton().set_use_accumulated_input(false);
+
         // register this controller in the parent
         if let Some(mut p) = self
             .base()
@@ -196,6 +213,7 @@ impl INode for FighterController {
         if self.movement_buffer.len() > self.movement_buffer_len.saturating_cast::<usize>() {
             self.movement_buffer.pop_back();
         }
+
         // age the queued action
         if let Some(action) = self.action.as_mut() {
             action.age += 1;
@@ -232,11 +250,14 @@ impl INode for FighterController {
             }
         });
 
-        if act.is_some() {
-            self.action = act;
+        if let Some(action) = act {
+            tracing::trace!(frame = self.frame_count, action = ?action.kind, "queue action");
+            self.action = Some(action);
         }
 
         // update jump maintanence
         self.maintaining_jump = input.is_action_pressed(AVATAR_JUMP);
+
+        self.frame_count = self.frame_count.wrapping_add(1);
     }
 }
