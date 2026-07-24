@@ -53,6 +53,8 @@ impl FacingDirection {
     }
 }
 
+pub const AVATAR_UP: &str = "avatar_move_up";
+pub const AVATAR_DOWN: &str = "avatar_move_down";
 pub const AVATAR_JUMP: &str = "avatar_jump";
 pub const AVATAR_DASH: &str = "avatar_dash";
 
@@ -75,6 +77,11 @@ pub struct Fighter2D {
     #[export]
     #[init(val = 512.0)]
     pub terminal_speed: real,
+
+    /// The fighter's fastfall speed.
+    #[export]
+    #[init(val = 1024.0)]
+    pub fastfall_speed: real,
 
     /// Initial vertical speed of jumps.
     #[export]
@@ -115,6 +122,8 @@ pub struct Fighter2D {
 
     /// how many frames of dash we have left
     dash_frames_remaining: u32,
+
+    fastfall: bool,
 
     state: PrimaryState,
     facing: FacingDirection,
@@ -282,6 +291,7 @@ impl Fighter2D {
     fn enter_falling(&mut self) {
         tracing::trace!("enter_falling");
         self.state = PrimaryState::Falling;
+        self.fastfall = false;
         self.sprite.play_ex().name("fall").done();
     }
 
@@ -306,12 +316,21 @@ impl Fighter2D {
             return;
         }
 
-        let grav = self.base().get_gravity();
+        if !self.fastfall && Input::singleton().is_action_just_pressed(AVATAR_DOWN) {
+            self.fastfall = true;
+        }
 
-        let c_vel = self.base().get_velocity();
+        let y_vel = if self.fastfall {
+            self.fastfall_speed
+        } else {
+            let grav = self.base().get_gravity();
+
+            let c_vel = self.base().get_velocity();
+            (c_vel.y + (grav.y as f64 * delta) as f32).min(self.terminal_speed)
+        };
         let vel = Vector2::new(
             self.movement_input_to_velocity(move_input.unwrap_or(0.0)).x,
-            (c_vel.y + (grav.y as f64 * delta) as f32).min(self.terminal_speed),
+            y_vel,
         );
 
         self.base_mut().set_velocity(vel);
