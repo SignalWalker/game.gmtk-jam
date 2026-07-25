@@ -49,6 +49,11 @@ pub struct Attack2D {
 
 impl Attack2D {
     fn on_body_entered(attack: Gd<Self>, body: Gd<Node2D>) {
+        if let Some(src) = attack.bind().source.as_ref()
+            && body.instance_id() == src.instance_id()
+        {
+            return;
+        }
         let body_uncast = body.clone();
         if let Ok(mut body) = body.try_dynify::<dyn Attackable>() {
             Self::on_hit(attack.clone(), body_uncast);

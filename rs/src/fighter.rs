@@ -9,6 +9,7 @@ use godot::{
     obj::{WithBaseField as _, WithUserSignals},
     prelude::{Base, GodotClass, GodotConvert, InstanceId, OnReady, godot_api, godot_dyn},
 };
+use godot_utils::ArrayExt;
 
 use crate::{
     attack::{Attack2D, Attackable},
@@ -142,7 +143,7 @@ pub struct Fighter2D {
     pub air_damping: f32,
 
     #[export]
-    #[init(val = 12.0)]
+    #[init(val = 6.0)]
     pub dash_damping: f32,
 
     #[init(node = "%AnimationPlayer")]
@@ -180,7 +181,7 @@ pub struct Fighter2D {
     attack_frames: u32,
 
     #[export]
-    #[init(val = 9)]
+    #[init(val = 45)]
     attack_ground_heavy_frames: u32,
 }
 
@@ -278,11 +279,27 @@ impl Fighter2D {
     }
 
     fn update_facing(&mut self, move_input: real) {
+        fn set_attack_scales(fighter: &mut Fighter2D, scale: Vector2) {
+            for mut attack in fighter
+                .base()
+                .get_children()
+                .into_iter_shared_of_type::<Attack2D>()
+            {
+                attack.set_scale(scale);
+            }
+        }
+
         self.facing = FacingDirection::from_input(move_input);
 
         match self.facing {
-            FacingDirection::Left => self.sprite.set_flip_h(true),
-            FacingDirection::Right => self.sprite.set_flip_h(false),
+            FacingDirection::Left => {
+                self.sprite.set_flip_h(true);
+                set_attack_scales(self, Vector2::new(-1.0, 1.0));
+            }
+            FacingDirection::Right => {
+                self.sprite.set_flip_h(false);
+                set_attack_scales(self, Vector2::new(1.0, 1.0));
+            }
         }
     }
 
@@ -756,6 +773,16 @@ impl Fighter2D {
 impl ICharacterBody2D for Fighter2D {
     fn enter_tree(&mut self) {
         self.current_health = self.max_health;
+    }
+
+    fn ready(&mut self) {
+        for mut attack in self
+            .base()
+            .get_children()
+            .into_iter_shared_of_type::<Attack2D>()
+        {
+            attack.bind_mut().source = Some(self.to_gd().upcast());
+        }
     }
 
     fn physics_process(&mut self, delta: f64) {

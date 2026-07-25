@@ -45,19 +45,6 @@ func on_state(state: int) -> void:
 			pass
 "
 
-[sub_resource type="GDScript" id="GDScript_gnh3c"]
-resource_name = "vel_debug"
-script/source = "extends Label
-
-func _ready() -> void:
-	self.process_physics_priority = -1
-
-func _physics_process(_delta: float) -> void:
-	var gd: Vector2 = %Avatar.velocity
-	var i: Vector2 = %Avatar.get_internal_velocity()
-	self.text = \"{0}, {1}\\n{2}, {3}\".format([i.x, i.y, gd.x, gd.y])
-"
-
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_naxgx"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_wvtyy"]
@@ -143,6 +130,7 @@ sources/0 = SubResource("TileSetAtlasSource_lvrkv")
 metadata/_edit_lock_ = true
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=40750586]
+visible = false
 
 [node name="StateDebug" type="VBoxContainer" parent="CanvasLayer2" unique_id=579917620]
 anchors_preset = -1
@@ -167,7 +155,6 @@ grow_vertical = 2
 metadata/_edit_lock_ = true
 
 [node name="Avatar" parent="." unique_id=741533885 instance=ExtResource("2_naxgx")]
-dash_damping = 0.0
 unique_name_in_owner = true
 position = Vector2(44, 403)
 
@@ -180,15 +167,7 @@ limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 2.0
 
-[node name="Label" type="Label" parent="Avatar" unique_id=1012140092]
-offset_left = -24.0
-offset_top = -78.0
-offset_right = 21.0
-offset_bottom = -55.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-text = "av vel"
-script = SubResource("GDScript_gnh3c")
+[node name="FighterController" type="FighterController" parent="Avatar" unique_id=67646944]
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=2070460119]
 position = Vector2(0, 450)
@@ -216,7 +195,7 @@ metadata/_edit_lock_ = true
 shape = SubResource("WorldBoundaryShape2D_gnh3c")
 
 [node name="AttackTest" type="Node2D" parent="." unique_id=1371300542]
-position = Vector2(301, 318)
+position = Vector2(321, 123)
 metadata/_edit_group_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="AttackTest" unique_id=1250432377]
@@ -234,3 +213,6 @@ knockback = Vector2(256, -256)
 z_index = -1
 tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAQAA4AAAAAAAAAAAARAA4AAAAAAAAAAAASAA4AAAAAAAAAAAATAA4AAAAAAAAAAAAUAA4AAAAAAAAAAAAVAA4AAAAAAAAAAAAWAA4AAAAAAAAAAAAXAA4AAAAAAAAAAAAYAA4AAAAAAAAAAAAZAA4AAAAAAAAAAAAaAA4AAAAAAAAAAAAbAA4AAAAAAAAAAAAcAA4AAAAAAAAAAAAdAA4AAAAAAAAAAAAeAA4AAAAAAAAAAAAfAA4AAAAAAAAAAAAgAA4AAAAAAAAAAAAhAA4AAAAAAAAAAAAiAA4AAAAAAAAAAAAjAA4AAAAAAAAAAAAkAA4AAAAAAAAAAAAlAA4AAAAAAAAAAAAmAA4AAAAAAAAAAAAnAA4AAAAAAAAAAAAoAA4AAAAAAAAAAAApAA4AAAAAAAAAAAAqAA4AAAAAAAAAAAArAA4AAAAAAAAAAAAsAA4AAAAAAAAAAAAtAA4AAAAAAAAAAAAuAA4AAAAAAAAAAAAvAA4AAAAAAAAAAAAEAA0AAAAAAAAAAAAJAA0AAAAAAAAAAAAOAA0AAAAAAAAAAAATAA0AAAAAAAAAAAAYAA0AAAAAAAAAAAAdAA0AAAAAAAAAAAAiAA0AAAAAAAAAAAAnAA0AAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_naxgx")
+
+[node name="Avatar2" parent="." unique_id=1784894730 instance=ExtResource("2_naxgx")]
+position = Vector2(350, 395)
