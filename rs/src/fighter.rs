@@ -1,6 +1,6 @@
 use godot::{
     classes::{
-        AnimatedSprite2D, CharacterBody2D, ICharacterBody2D,
+        AnimationPlayer, CharacterBody2D, ICharacterBody2D,
         class_macros::private::virtuals::{
             Xrvrs::Gd,
             ZipReader::{Vector2, real},
@@ -12,7 +12,7 @@ use godot::{
 
 use crate::{
     attack::{Attack2D, Attackable},
-    input::{Action, FighterController, QueuedAction},
+    input::{Action, FighterController},
 };
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
@@ -127,8 +127,8 @@ pub struct Fighter2D {
     #[init(val = 8.0)]
     pub knockback_horizontal_damping: f32,
 
-    #[init(node = "%Sprite")]
-    sprite: OnReady<Gd<AnimatedSprite2D>>,
+    #[init(node = "%AnimationPlayer")]
+    anim: OnReady<Gd<AnimationPlayer>>,
 
     controller: Option<Gd<FighterController>>,
 
@@ -251,7 +251,7 @@ impl Fighter2D {
 
     fn enter_standing(&mut self) {
         self.state = PrimaryState::Stand;
-        self.sprite.play_ex().name("stand").done();
+        self.anim.play_ex().name("stand").done();
         self.jumps_remaining = self.air_jump_count;
     }
 
@@ -277,7 +277,7 @@ impl Fighter2D {
             FacingDirection::Left => "walk_left",
             FacingDirection::Right => "walk_right",
         };
-        self.sprite.play_ex().name(anim_name).done();
+        self.anim.play_ex().name(anim_name).done();
     }
 
     fn enter_walking(&mut self) {
@@ -331,7 +331,7 @@ impl Fighter2D {
         tracing::trace!(frame = self.frame_count, "jump");
 
         self.state = PrimaryState::Jumping;
-        self.sprite.play_ex().name("jump").done();
+        self.anim.play_ex().name("jump").done();
 
         let mut vel = self.base().get_velocity();
         vel.y = -self.jump_speed;
@@ -394,7 +394,7 @@ impl Fighter2D {
 
     fn enter_airjump(&mut self) {
         self.state = PrimaryState::AirJump;
-        self.sprite.play_ex().name("jump").done();
+        self.anim.play_ex().name("jump").done();
 
         let mut vel = self.base().get_velocity();
         vel.y = -self.airjump_speed;
@@ -454,7 +454,7 @@ impl Fighter2D {
     fn enter_falling(&mut self) {
         self.state = PrimaryState::Falling;
         self.fastfall = false;
-        self.sprite.play_ex().name("fall").done();
+        self.anim.play_ex().name("fall").done();
     }
 
     fn process_falling(&mut self, delta: f64) {
@@ -545,10 +545,7 @@ impl Fighter2D {
     fn enter_airdash(&mut self) {
         self.state = PrimaryState::AirDash;
         self.dash_frames_remaining = self.airdash_frames;
-        self.sprite
-            .play_ex()
-            .name(self.facing.to_dash_anim())
-            .done();
+        self.anim.play_ex().name(self.facing.to_dash_anim()).done();
     }
 
     fn process_airdash(&mut self, delta: f64) {
@@ -579,10 +576,7 @@ impl Fighter2D {
     fn enter_ground_dash(&mut self) {
         self.state = PrimaryState::GroundDash;
         self.dash_frames_remaining = self.ground_dash_frames;
-        self.sprite
-            .play_ex()
-            .name(self.facing.to_dash_anim())
-            .done();
+        self.anim.play_ex().name(self.facing.to_dash_anim()).done();
     }
 
     fn process_ground_dash(&mut self, delta: f64) {
@@ -619,7 +613,7 @@ impl Fighter2D {
         self.state = PrimaryState::HitStun;
         self.hitstun_frames_remaining = frames;
         self.base_mut().set_velocity(knockback);
-        self.sprite.play_ex().name("hitstun").done();
+        self.anim.play_ex().name("hitstun").done();
     }
 
     fn process_hitstun(&mut self, delta: f64) {

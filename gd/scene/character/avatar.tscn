@@ -2,6 +2,162 @@
 
 [ext_resource type="Texture2D" uid="uid://cblcxyv3qpkj8" path="res://art/character/test.png" id="1_lntun"]
 
+[sub_resource type="Animation" id="Animation_uwhti"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stand"]
+}
+
+[sub_resource type="Animation" id="Animation_kghev"]
+resource_name = "dash_left"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"dash_left"]
+}
+
+[sub_resource type="Animation" id="Animation_pkhje"]
+resource_name = "dash_right"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"dash_right"]
+}
+
+[sub_resource type="Animation" id="Animation_wcanm"]
+resource_name = "fall"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"fall"]
+}
+
+[sub_resource type="Animation" id="Animation_4hmy4"]
+resource_name = "hitstun"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"hitstun"]
+}
+
+[sub_resource type="Animation" id="Animation_yybnm"]
+resource_name = "jump"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"jump"]
+}
+
+[sub_resource type="Animation" id="Animation_lntun"]
+resource_name = "stand"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stand"]
+}
+
+[sub_resource type="Animation" id="Animation_kbn5q"]
+resource_name = "walk_left"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"walk_left"]
+}
+
+[sub_resource type="Animation" id="Animation_aekil"]
+resource_name = "walk_right"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"walk_right"]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uwhti"]
+_data = {
+&"RESET": SubResource("Animation_uwhti"),
+&"dash_left": SubResource("Animation_kghev"),
+&"dash_right": SubResource("Animation_pkhje"),
+&"fall": SubResource("Animation_wcanm"),
+&"hitstun": SubResource("Animation_4hmy4"),
+&"jump": SubResource("Animation_yybnm"),
+&"stand": SubResource("Animation_lntun"),
+&"walk_left": SubResource("Animation_kbn5q"),
+&"walk_right": SubResource("Animation_aekil")
+}
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_bm8h0"]
 radius = 16.0
 
@@ -131,11 +287,19 @@ collision_mask = 3
 
 [node name="FighterController" type="FighterController" parent="." unique_id=513151854]
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1336997657]
+unique_name_in_owner = true
+deterministic = true
+root_motion_local = true
+callback_mode_process = 0
+callback_mode_method = 1
+libraries/ = SubResource("AnimationLibrary_uwhti")
+autoplay = &"stand"
+
 [node name="WorldCollisionShape" type="CollisionShape2D" parent="." unique_id=2007443014]
 shape = SubResource("CircleShape2D_bm8h0")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=979360305]
-unique_name_in_owner = true
 sprite_frames = SubResource("SpriteFrames_bm8h0")
 animation = &"stand"
 autoplay = "stand"
