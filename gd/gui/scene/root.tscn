@@ -91,6 +91,7 @@ script = SubResource("GDScript_r74kv")
 
 [node name="GameViewport" type="SubViewport" parent="IntegerScalingContainer/IntegerScalingSubViewportContainer" unique_id=2115337418]
 unique_name_in_owner = true
+disable_3d = true
 handle_input_locally = false
 snap_2d_vertices_to_pixel = true
 canvas_item_default_texture_filter = 0

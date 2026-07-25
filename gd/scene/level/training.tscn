@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://bnf8ciupwm4vt"]
+[gd_scene format=4 uid="uid://bnf8ciupwm4vt"]
 
 [ext_resource type="PackedScene" uid="uid://1svy2wscsuk1" path="res://scene/attack/fireball.tscn" id="2_gnh3c"]
 [ext_resource type="PackedScene" uid="uid://b15d0or3erbra" path="res://scene/character/avatar.tscn" id="2_naxgx"]
+[ext_resource type="Texture2D" uid="uid://lvbhg3rij5uc" path="res://art/tile/test_tile.png" id="3_gnh3c"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_naxgx"]
 
@@ -74,12 +75,39 @@ _data = {
 &"attack_test": SubResource("Animation_wvtyy")
 }
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lvrkv"]
+texture = ExtResource("3_gnh3c")
+texture_region_size = Vector2i(32, 32)
+use_texture_padding = false
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_naxgx"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_lvrkv")
+
 [node name="Training" type="Node2D" unique_id=134973433]
 metadata/_edit_lock_ = true
 
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=798801174]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=2052759123]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Avatar" parent="." unique_id=741533885 instance=ExtResource("2_naxgx")]
-airjump_speed = 448.0
-position = Vector2(27, 429)
+position = Vector2(44, 403)
+
+[node name="Camera2D" type="Camera2D" parent="Avatar" unique_id=1269415781]
+position = Vector2(0, -113)
+zoom = Vector2(0.75, 0.75)
+process_callback = 0
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=2070460119]
 position = Vector2(0, 450)
@@ -98,6 +126,8 @@ shape = SubResource("WorldBoundaryShape2D_wvtyy")
 
 [node name="WallRight" type="StaticBody2D" parent="." unique_id=1468207171]
 position = Vector2(600, 0)
+collision_layer = 0
+collision_mask = 0
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
 
@@ -118,3 +148,9 @@ autoplay = &"attack_test"
 
 [node name="Fireball" parent="AttackTest" unique_id=756207336 instance=ExtResource("2_gnh3c")]
 knockback = Vector2(256, -256)
+monitoring = false
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1718760583]
+z_index = -1
+tile_map_data = PackedByteArray("AAAAAA0AAAAAAAAAAAABAA0AAAAAAAAAAAACAA0AAAAAAAAAAAADAA0AAAAAAAAAAAADAAwAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAsAAAAAAAAAAAAGAAwAAAAAAAAAAAAHAAwAAAAAAAAAAAAHAA0AAAAAAAAAAAAIAA0AAAAAAAAAAAAJAA0AAAAAAAAAAAAJAAwAAAAAAAAAAAAKAAwAAAAAAAAAAAALAAwAAAAAAAAAAAAMAA0AAAAAAAAAAAANAA0AAAAAAAAAAAAOAA0AAAAAAAAAAAAPAA0AAAAAAAAAAAAPAAwAAAAAAAAAAAAQAAwAAAAAAAAAAAAQAAsAAAAAAAAAAAARAAsAAAAAAAAAAAARAAoAAAAAAAAAAAASAAoAAAAAAAAAAAATAAoAAAAAAAAAAAATAAsAAAAAAAAAAAAUAAwAAAAAAAAAAAAUAA0AAAAAAAAAAAAVAA0AAAAAAAAAAAAVAAwAAAAAAAAAAAAWAAwAAAAAAAAAAAATAA0AAAAAAAAAAAASAA0AAAAAAAAAAAASAAwAAAAAAAAAAAASAAsAAAAAAAAAAAAUAAsAAAAAAAAAAAAVAAsAAAAAAAAAAAAVAAoAAAAAAAAAAAAWAAoAAAAAAAAAAAAXAAoAAAAAAAAAAAAXAAsAAAAAAAAAAAAXAAwAAAAAAAAAAAAWAA0AAAAAAAAAAAAXAA0AAAAAAAAAAAAYAAwAAAAAAAAAAAAYAA0AAAAAAAAAAAAZAA0AAAAAAAAAAAAZAAwAAAAAAAAAAAAaAAwAAAAAAAAAAAAbAAwAAAAAAAAAAAAcAAwAAAAAAAAAAAAcAAsAAAAAAAAAAAAdAAsAAAAAAAAAAAAdAAwAAAAAAAAAAAAeAAwAAAAAAAAAAAAeAA0AAAAAAAAAAAAaAA0AAAAAAAAAAAAbAA4AAAAAAAAAAAAcAA4AAAAAAAAAAAAaAA4AAAAAAAAAAAAZAA4AAAAAAAAAAAAYAA8AAAAAAAAAAAAXAA8AAAAAAAAAAAAWAA8AAAAAAAAAAAAVAA8AAAAAAAAAAAAUAA8AAAAAAAAAAAATAA8AAAAAAAAAAAASAA8AAAAAAAAAAAASABAAAAAAAAAAAAARAA8AAAAAAAAAAAATAA4AAAAAAAAAAAAUAA4AAAAAAAAAAAAVAA4AAAAAAAAAAAASAA4AAAAAAAAAAAAfAA4AAAAAAAAAAAAfAA8AAAAAAAAAAAAeAA8AAAAAAAAAAAAdAA8AAAAAAAAAAAAgAA4AAAAAAAAAAAAhAA4AAAAAAAAAAAAiAA4AAAAAAAAAAAAjAA4AAAAAAAAAAAAkAA4AAAAAAAAAAAAkAA0AAAAAAAAAAAAkAAwAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_naxgx")

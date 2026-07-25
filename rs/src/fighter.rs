@@ -1,8 +1,8 @@
 use godot::{
     classes::{
-        AnimationPlayer, CharacterBody2D, ICharacterBody2D,
+        AnimationPlayer, CharacterBody2D, ICharacterBody2D, Sprite2D,
         class_macros::private::virtuals::{
-            Xrvrs::Gd,
+            Xrvrs::{Gd, math::FloatExt},
             ZipReader::{Vector2, real},
         },
     },
@@ -27,6 +27,26 @@ pub enum PrimaryState {
     AirJump,
     Falling,
     HitStun,
+
+    // normals
+    AttackGroundLight1,
+    AttackGroundLight2,
+    AttackGroundLight3,
+
+    AttackGroundHeavy,
+
+    AttackAirLight1,
+    AttackAirLight2,
+    AttackAirLight3,
+
+    AttackAirHeavy,
+
+    // commands
+    AttackLauncher,
+    AttackStinger,
+    AttackRisingSlash,
+    AttackDivekick,
+    AttackHelmBreaker,
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
@@ -93,7 +113,7 @@ pub struct Fighter2D {
     pub jump_speed: real,
 
     #[export]
-    #[init(val = 256.0)]
+    #[init(val = 448.0)]
     pub airjump_speed: real,
 
     /// The number of times the fighter can jump in midair.
@@ -129,6 +149,8 @@ pub struct Fighter2D {
 
     #[init(node = "%AnimationPlayer")]
     anim: OnReady<Gd<AnimationPlayer>>,
+    #[init(node = "%Sprite2D")]
+    sprite: OnReady<Gd<Sprite2D>>,
 
     controller: Option<Gd<FighterController>>,
 
@@ -183,21 +205,26 @@ impl Fighter2D {
             .and_then(|c| c.bind().current_horizontal())
     }
 
-    fn horizontal_movement_to_velocity(&self, input: f32) -> Vector2 {
-        Vector2::new(
-            if input < 0.0 {
-                -self.walk_speed
-            } else {
-                self.walk_speed
-            },
-            0.0,
-        )
+    fn horizontal_movement_to_velocity(&self, input: f32) -> real {
+        if input < 0.0 {
+            -self.walk_speed
+        } else {
+            self.walk_speed
+        }
     }
 
-    fn get_horizontal_velocity(&self) -> Vector2 {
+    fn get_horizontal_velocity(&self) -> real {
         self.get_horizontal_input()
             .map(|i| self.horizontal_movement_to_velocity(i))
-            .unwrap_or(Vector2::ZERO)
+            .unwrap_or(0.0)
+    }
+
+    fn get_horizontal_velocity_with_min_mag(&self, min: real) -> real {
+        let res = self.get_horizontal_velocity();
+        if res.is_sign_positive() != min.is_sign_positive() {
+            return res;
+        }
+        res.abs().max(min.abs()).copysign(res)
     }
 
     fn get_velocity_plus_gravity(&mut self, c_vel: Vector2, delta: f64) -> Vector2 {
@@ -238,6 +265,11 @@ impl Fighter2D {
 
     fn update_facing(&mut self, move_input: real) {
         self.facing = FacingDirection::from_input(move_input);
+
+        match self.facing {
+            FacingDirection::Left => self.sprite.set_flip_h(true),
+            FacingDirection::Right => self.sprite.set_flip_h(false),
+        }
     }
 
     // [--------] INIT [--------]
@@ -251,7 +283,7 @@ impl Fighter2D {
 
     fn enter_standing(&mut self) {
         self.state = PrimaryState::Stand;
-        self.anim.play_ex().name("stand").done();
+        self.anim.play_ex().name("idle").done();
         self.jumps_remaining = self.air_jump_count;
     }
 
@@ -273,11 +305,7 @@ impl Fighter2D {
     // [--------] WALKING [--------]
 
     fn update_walk_anim(&mut self) {
-        let anim_name = match self.facing {
-            FacingDirection::Left => "walk_left",
-            FacingDirection::Right => "walk_right",
-        };
-        self.anim.play_ex().name(anim_name).done();
+        self.anim.play_ex().name("run").done();
     }
 
     fn enter_walking(&mut self) {
@@ -319,7 +347,7 @@ impl Fighter2D {
         // no actions, we're walking
 
         let vel = self.horizontal_movement_to_velocity(input);
-        self.base_mut().set_velocity(vel);
+        self.base_mut().set_velocity(Vector2::new(vel, 0.0));
         if self.base_mut().move_and_slide() {
             // TODO :: handle collisions
         }
@@ -369,8 +397,8 @@ impl Fighter2D {
         }
 
         let grav_y = (self.base().get_gravity().y as f64 * delta) as f32;
-        let c_vel_y = self.base().get_velocity().y;
-        let vel_y = c_vel_y + grav_y;
+        let c_vel = self.base().get_velocity();
+        let vel_y = c_vel.y + grav_y;
 
         if vel_y >= 0.0 {
             start_falling(self);
@@ -378,9 +406,9 @@ impl Fighter2D {
             return;
         }
 
-        let move_vel = self.get_horizontal_velocity();
-        self.base_mut()
-            .set_velocity(Vector2::new(move_vel.x, vel_y));
+        let vel_x = self.get_horizontal_velocity_with_min_mag(c_vel.x);
+
+        self.base_mut().set_velocity(Vector2::new(vel_x, vel_y));
         if self.base_mut().move_and_slide() {
             // TODO :: jump collisions
         }
@@ -432,8 +460,8 @@ impl Fighter2D {
         }
 
         let grav_y = (self.base().get_gravity().y as f64 * delta) as f32;
-        let c_vel_y = self.base().get_velocity().y;
-        let vel_y = c_vel_y + grav_y;
+        let c_vel = self.base().get_velocity();
+        let vel_y = c_vel.y + grav_y;
 
         if vel_y >= 0.0 {
             start_falling(self);
@@ -441,9 +469,8 @@ impl Fighter2D {
             return;
         }
 
-        let move_vel = self.get_horizontal_velocity();
-        self.base_mut()
-            .set_velocity(Vector2::new(move_vel.x, vel_y));
+        let vel_x = self.get_horizontal_velocity_with_min_mag(c_vel.x);
+        self.base_mut().set_velocity(Vector2::new(vel_x, vel_y));
         if self.base_mut().move_and_slide() {
             // TODO :: jump collisions
         }
@@ -492,14 +519,12 @@ impl Fighter2D {
             self.fastfall = true;
         }
 
-        let move_x = move_input
-            .map(|i| self.horizontal_movement_to_velocity(i).x)
-            .unwrap_or(0.0);
+        let c_vel = self.base().get_velocity();
+        let move_x = self.get_horizontal_velocity_with_min_mag(c_vel.x);
 
         let new_vel = if self.fastfall {
             Vector2::new(move_x, self.fastfall_speed)
         } else {
-            let c_vel = self.base().get_velocity();
             self.get_velocity_plus_gravity(Vector2::new(move_x, c_vel.y), delta)
         };
 
@@ -652,6 +677,21 @@ impl ICharacterBody2D for Fighter2D {
             PrimaryState::AirJump => self.process_airjumping(delta),
             PrimaryState::Falling => self.process_falling(delta),
             PrimaryState::HitStun => self.process_hitstun(delta),
+            // normals
+            PrimaryState::AttackGroundLight1 => todo!(),
+            PrimaryState::AttackGroundLight2 => todo!(),
+            PrimaryState::AttackGroundLight3 => todo!(),
+            PrimaryState::AttackGroundHeavy => todo!(),
+            PrimaryState::AttackAirLight1 => todo!(),
+            PrimaryState::AttackAirLight2 => todo!(),
+            PrimaryState::AttackAirLight3 => todo!(),
+            PrimaryState::AttackAirHeavy => todo!(),
+            // commands
+            PrimaryState::AttackLauncher => todo!(),
+            PrimaryState::AttackStinger => todo!(),
+            PrimaryState::AttackRisingSlash => todo!(),
+            PrimaryState::AttackDivekick => todo!(),
+            PrimaryState::AttackHelmBreaker => todo!(),
         }
         self.frame_count = self.frame_count.wrapping_add(1);
     }

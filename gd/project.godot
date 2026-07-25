@@ -27,7 +27,7 @@ SceneManager="*uid://dxowse0hv8up2"
 window/size/viewport_width=600
 window/size/viewport_height=450
 window/size/sharp_corners=true
-window/stretch/aspect="ignore"
+window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
 
 [editor]
@@ -111,8 +111,3 @@ scaling_3d/mode.ios=5
 scaling_3d/mode.macos=5
 textures/decals/filter=0
 textures/light_projectors/filter=0
-2d/snap/snap_2d_transforms_to_pixel=true
-
-[scene_manager]
-
-runtime/root_scene="uid://i252s7rwmnbl"
