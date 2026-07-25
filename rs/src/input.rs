@@ -9,7 +9,7 @@ use godot::{
     prelude::{Base, GodotClass, INode, Node, godot_api},
 };
 
-use crate::fighter::Fighter2D;
+use crate::fighter::{FacingDirection, Fighter2D};
 
 mod movement;
 pub use movement::*;
@@ -94,6 +94,10 @@ pub struct FighterController {
     #[init(val = 0.5)]
     pub fastfall_min_diff: real,
 
+    #[export]
+    #[init(val = 0.25)]
+    pub dash_min_strength: real,
+
     movement_buffer: VecDeque<AnalogMovementFrame>,
 
     pub maintaining_jump: bool,
@@ -160,6 +164,14 @@ impl FighterController {
             }
         }
         false
+    }
+
+    pub fn should_maintain_dash(&self, dash_dir: FacingDirection) -> bool {
+        let Some(strength) = self.current_horizontal() else {
+            return false;
+        };
+        (dash_dir == FacingDirection::Right && strength >= self.dash_min_strength)
+            || (dash_dir == FacingDirection::Left && strength <= -self.dash_min_strength)
     }
 }
 

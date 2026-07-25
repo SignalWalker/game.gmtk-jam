@@ -224,6 +224,12 @@ impl Fighter2D {
             .is_some_and(|c| c.bind().maintaining_jump)
     }
 
+    fn should_maintain_dash(&self) -> bool {
+        self.controller
+            .as_ref()
+            .is_some_and(|c| c.bind().should_maintain_dash(self.facing))
+    }
+
     fn wants_fastfall(&self) -> bool {
         self.controller
             .as_ref()
@@ -545,11 +551,17 @@ impl Fighter2D {
             .done();
     }
 
-    fn process_airdash(&mut self, _delta: f64) {
+    fn process_airdash(&mut self, delta: f64) {
         self.dash_frames_remaining -= 1;
 
         match self.consume_action() {
             _ => {}
+        }
+
+        if !self.should_maintain_dash() {
+            self.enter_falling();
+            self.process_falling(delta);
+            return;
         }
 
         let vel = self.facing.to_vec() * self.airdash_speed;
@@ -583,6 +595,12 @@ impl Fighter2D {
                 return;
             }
             _ => {}
+        }
+
+        if !self.should_maintain_dash() {
+            self.enter_standing_or_walking(self.get_horizontal_input());
+            self.physics_process(delta);
+            return;
         }
 
         let vel = self.facing.to_vec() * self.ground_dash_speed;
