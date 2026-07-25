@@ -3,18 +3,54 @@
 [ext_resource type="Texture2D" uid="uid://ci7wmefdejxun" path="res://art/character/astra/idle/idle.png" id="1_5uxvy"]
 [ext_resource type="Texture2D" uid="uid://dhxrmkrxxkcol" path="res://art/character/astra/fall/fall.png" id="1_fg2vc"]
 [ext_resource type="Texture2D" uid="uid://c7bnh4scx3hv5" path="res://art/character/astra/dash/ASTRA_DASH00000.png" id="1_piawc"]
+[ext_resource type="Texture2D" uid="uid://xinjo0at0dmt" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK2.png" id="2_0dms8"]
 [ext_resource type="Texture2D" uid="uid://ckt7w8iq0576h" path="res://art/character/astra/run/astra_run_rough00000.png" id="2_535uj"]
+[ext_resource type="Texture2D" uid="uid://cqhjnb861iob8" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00000.png" id="2_cd5wk"]
 [ext_resource type="Texture2D" uid="uid://b4kuurhpkn6yp" path="res://art/character/astra/jump/jump.png" id="2_gabma"]
 [ext_resource type="Texture2D" uid="uid://dogujps4iq35" path="res://art/character/astra/dash/ASTRA_DASH00001.png" id="2_xabps"]
 [ext_resource type="Texture2D" uid="uid://dvu8xxbvnok5w" path="res://art/character/astra/run/astra_run_rough00001.png" id="3_5uxvy"]
+[ext_resource type="Texture2D" uid="uid://lhpoq4aurkev" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK3.png" id="3_6uym6"]
+[ext_resource type="Texture2D" uid="uid://cf8s1f4i60c5r" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00001.png" id="3_cd5wk"]
+[ext_resource type="Texture2D" uid="uid://b2smilam647gl" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00002.png" id="4_2n78d"]
+[ext_resource type="Texture2D" uid="uid://55b6lsl1ye70" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK4.png" id="4_c0odl"]
 [ext_resource type="Texture2D" uid="uid://bq12ka6led70h" path="res://art/character/astra/run/astra_run_rough00002.png" id="4_gabma"]
+[ext_resource type="Texture2D" uid="uid://cpq1ur1pk68r5" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00003.png" id="5_5rsqi"]
 [ext_resource type="Texture2D" uid="uid://4wk14f1rvd8h" path="res://art/character/astra/run/astra_run_rough00003.png" id="5_fg2vc"]
+[ext_resource type="Texture2D" uid="uid://cncs567fbe1kk" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK5.png" id="5_msxus"]
+[ext_resource type="Texture2D" uid="uid://wspjagxeoxrv" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK6.png" id="6_hydu0"]
 [ext_resource type="Texture2D" uid="uid://cxh4st1ndynxb" path="res://art/character/astra/run/astra_run_rough00004.png" id="6_piawc"]
+[ext_resource type="Texture2D" uid="uid://brm30m41a6sn7" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00004.png" id="6_vo580"]
+[ext_resource type="Texture2D" uid="uid://b3bmc80vcwqe3" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK7.png" id="7_8iwac"]
+[ext_resource type="Texture2D" uid="uid://duqunuw1jmaeg" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00005.png" id="7_ua2gx"]
 [ext_resource type="Texture2D" uid="uid://c10n117pu85gt" path="res://art/character/astra/run/astra_run_rough00005.png" id="7_xabps"]
+[ext_resource type="Texture2D" uid="uid://cttuh126kj4jy" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK8.png" id="8_8s13k"]
 [ext_resource type="Texture2D" uid="uid://yg0eresxh50r" path="res://art/character/astra/run/astra_run_rough00006.png" id="8_cd5wk"]
+[ext_resource type="Texture2D" uid="uid://cxelqrrpgju3h" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00006.png" id="8_h3n4l"]
+[ext_resource type="Texture2D" uid="uid://csxfl51we0cl" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK9.png" id="9_1gm1m"]
 [ext_resource type="Texture2D" uid="uid://kxjj6t114u7u" path="res://art/character/astra/run/astra_run_rough00007.png" id="9_2n78d"]
+[ext_resource type="Texture2D" uid="uid://lfpdsbu3mn6f" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00007.png" id="9_e5sok"]
+[ext_resource type="Texture2D" uid="uid://bpuviw55ghc7b" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00008.png" id="10_3cpxv"]
 [ext_resource type="Texture2D" uid="uid://byfhqe75vh3ur" path="res://art/character/astra/run/astra_run_rough00008.png" id="10_5rsqi"]
+[ext_resource type="Texture2D" uid="uid://bykmw8e8vgmw5" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK2.png" id="11_2wqrf"]
 [ext_resource type="Texture2D" uid="uid://b54y8okvnmvn2" path="res://art/character/astra/run/astra_run_rough00009.png" id="11_vo580"]
+[ext_resource type="Texture2D" uid="uid://diedlg768flkv" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK3.png" id="12_76an5"]
+[ext_resource type="Texture2D" uid="uid://jybitkls1waa" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK4.png" id="13_molt4"]
+[ext_resource type="Texture2D" uid="uid://c74lrygpvcu57" path="res://art/character/astra/hit/astra_HIT.png" id="14_f7gce"]
+[ext_resource type="Texture2D" uid="uid://dfdawch1giche" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK5.png" id="14_y3khx"]
+[ext_resource type="Texture2D" uid="uid://cykxw0rr61aex" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK6.png" id="15_oip8s"]
+[ext_resource type="Texture2D" uid="uid://u4myykxafqx5" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK7.png" id="16_m7m4j"]
+[ext_resource type="Texture2D" uid="uid://knhbsgyxy8sv" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK8.png" id="17_451ld"]
+[ext_resource type="Texture2D" uid="uid://cvf0v5a8hyisu" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK9.png" id="18_0kv7q"]
+[ext_resource type="Texture2D" uid="uid://08c5dq6hn1bu" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK3.png" id="27_xbxo4"]
+[ext_resource type="Texture2D" uid="uid://be8mywtgelgbl" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK4.png" id="28_tkjuv"]
+[ext_resource type="Texture2D" uid="uid://i3ay4iyy1fl7" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK5.png" id="29_iyh3h"]
+[ext_resource type="Texture2D" uid="uid://cnrjudv4avsjw" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK6.png" id="30_5jban"]
+[ext_resource type="Texture2D" uid="uid://dobg5uxvy1hbg" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK7.png" id="31_kl7x3"]
+[ext_resource type="Texture2D" uid="uid://5krslmxbm0s8" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK8.png" id="32_pjsqd"]
+[ext_resource type="Texture2D" uid="uid://dqmgchmcmhymo" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK9.png" id="33_p54o7"]
+[ext_resource type="Texture2D" uid="uid://dwekt60j2ljmd" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK10.png" id="34_rmeh5"]
+[ext_resource type="Texture2D" uid="uid://bencx6c0irb7q" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK11.png" id="35_u07xs"]
+[ext_resource type="Texture2D" uid="uid://ixdw4kbgkv7" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK12.png" id="36_h2ejc"]
 
 [sub_resource type="Animation" id="Animation_uwhti"]
 length = 0.001
@@ -41,6 +77,74 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_piawc"]
+resource_name = "attack_ground_heavy"
+length = 0.7500083556853234
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334, 0.4166667, 0.5, 0.5833334, 0.6666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_cd5wk"), ExtResource("3_cd5wk"), ExtResource("4_2n78d"), ExtResource("5_5rsqi"), ExtResource("6_vo580"), ExtResource("7_ua2gx"), ExtResource("8_h3n4l"), ExtResource("9_e5sok"), ExtResource("10_3cpxv")]
+}
+
+[sub_resource type="Animation" id="Animation_3cpxv"]
+resource_name = "attack_ground_light_1"
+length = 0.6666750198684632
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334, 0.4166667, 0.5, 0.5833334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("11_2wqrf"), ExtResource("12_76an5"), ExtResource("13_molt4"), ExtResource("14_y3khx"), ExtResource("15_oip8s"), ExtResource("16_m7m4j"), ExtResource("17_451ld"), ExtResource("18_0kv7q")]
+}
+
+[sub_resource type="Animation" id="Animation_0kv7q"]
+resource_name = "attack_ground_light_2"
+length = 0.6666750198684632
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334, 0.4166667, 0.5, 0.5833334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_0dms8"), ExtResource("3_6uym6"), ExtResource("4_c0odl"), ExtResource("5_msxus"), ExtResource("6_hydu0"), ExtResource("7_8iwac"), ExtResource("8_8s13k"), ExtResource("9_1gm1m")]
+}
+
+[sub_resource type="Animation" id="Animation_1gm1m"]
+resource_name = "attack_ground_light_3"
+length = 0.8333416915021836
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334, 0.4166667, 0.5, 0.5833334, 0.6666667, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("27_xbxo4"), ExtResource("28_tkjuv"), ExtResource("29_iyh3h"), ExtResource("30_5jban"), ExtResource("31_kl7x3"), ExtResource("32_pjsqd"), ExtResource("33_p54o7"), ExtResource("34_rmeh5"), ExtResource("35_u07xs"), ExtResource("36_h2ejc")]
 }
 
 [sub_resource type="Animation" id="Animation_fg2vc"]
@@ -104,6 +208,18 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_4hmy4"]
 resource_name = "hitstun"
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("14_f7gce")]
+}
 
 [sub_resource type="Animation" id="Animation_535uj"]
 resource_name = "idle"
@@ -199,6 +315,10 @@ length = 0.001
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uwhti"]
 _data = {
 &"RESET": SubResource("Animation_uwhti"),
+&"attack_ground_heavy": SubResource("Animation_piawc"),
+&"attack_ground_light_1": SubResource("Animation_3cpxv"),
+&"attack_ground_light_2": SubResource("Animation_0kv7q"),
+&"attack_ground_light_3": SubResource("Animation_1gm1m"),
 &"dash": SubResource("Animation_fg2vc"),
 &"fall": SubResource("Animation_wcanm"),
 &"hitstun": SubResource("Animation_4hmy4"),
@@ -208,10 +328,12 @@ _data = {
 &"stand": SubResource("Animation_lntun")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bm8h0"]
-radius = 48.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3cpxv"]
+radius = 22.0
+height = 98.0
 
 [node name="Avatar" type="Fighter2D" unique_id=741533885]
+attack_ground_heavy_frames = 45
 collision_layer = 3
 collision_mask = 3
 
@@ -227,10 +349,10 @@ libraries/ = SubResource("AnimationLibrary_uwhti")
 autoplay = &"stand"
 
 [node name="WorldCollisionShape" type="CollisionShape2D" parent="." unique_id=2007443014]
-shape = SubResource("CircleShape2D_bm8h0")
+shape = SubResource("CapsuleShape2D_3cpxv")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=741599858]
 unique_name_in_owner = true
-position = Vector2(9, -15)
+position = Vector2(15, -15)
 scale = Vector2(0.15, 0.15)
 texture = ExtResource("1_5uxvy")
