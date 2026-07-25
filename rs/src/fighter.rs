@@ -67,13 +67,6 @@ impl FacingDirection {
             Self::Right => Vector2::RIGHT,
         }
     }
-
-    pub const fn to_dash_anim(self) -> &'static str {
-        match self {
-            Self::Left => "dash_left",
-            Self::Right => "dash_right",
-        }
-    }
 }
 
 #[derive(GodotClass)]
@@ -147,6 +140,11 @@ pub struct Fighter2D {
     #[init(val = 8.0)]
     pub knockback_horizontal_damping: f32,
 
+    /// Pixels per frame to damp air momentum
+    #[export]
+    #[init(val = 12.0)]
+    pub air_damping: f32,
+
     #[init(node = "%AnimationPlayer")]
     anim: OnReady<Gd<AnimationPlayer>>,
     #[init(node = "%Sprite2D")]
@@ -205,7 +203,7 @@ impl Fighter2D {
             .and_then(|c| c.bind().current_horizontal())
     }
 
-    fn horizontal_movement_to_velocity(&self, input: f32) -> real {
+    const fn horizontal_movement_to_velocity(&self, input: f32) -> real {
         if input < 0.0 {
             -self.walk_speed
         } else {
@@ -221,7 +219,7 @@ impl Fighter2D {
 
     fn get_horizontal_velocity_with_min_mag(&self, min: real) -> real {
         let res = self.get_horizontal_velocity();
-        if res.is_sign_positive() != min.is_sign_positive() {
+        if (res >= 0.0) != (min >= 0.0) {
             return res;
         }
         res.abs().max(min.abs()).copysign(res)
@@ -285,6 +283,7 @@ impl Fighter2D {
         self.state = PrimaryState::Stand;
         self.anim.play_ex().name("idle").done();
         self.jumps_remaining = self.air_jump_count;
+        self.base_mut().set_velocity(Vector2::ZERO);
     }
 
     fn process_standing(&mut self, delta: f64) {
@@ -408,13 +407,28 @@ impl Fighter2D {
 
         let vel_x = self.get_horizontal_velocity_with_min_mag(c_vel.x);
 
-        self.base_mut().set_velocity(Vector2::new(vel_x, vel_y));
+        let mut vel = Vector2::new(vel_x, vel_y);
+
+        self.base_mut().set_velocity(vel);
         if self.base_mut().move_and_slide() {
             // TODO :: jump collisions
         }
 
+        // apply air damping
+        self.apply_air_damping(&mut vel);
+        self.base_mut().set_velocity(vel);
+
+        // check for whether the player let go of the jump button
         if !self.should_maintain_jump() {
             start_falling(self);
+        }
+    }
+
+    fn apply_air_damping(&self, vel: &mut Vector2) {
+        if vel.x.abs() > self.walk_speed {
+            vel.x = (vel.x.abs() - self.air_damping)
+                .max(self.walk_speed)
+                .copysign(vel.x);
         }
     }
 
@@ -470,10 +484,16 @@ impl Fighter2D {
         }
 
         let vel_x = self.get_horizontal_velocity_with_min_mag(c_vel.x);
-        self.base_mut().set_velocity(Vector2::new(vel_x, vel_y));
+        let mut vel = Vector2::new(vel_x, vel_y);
+
+        self.base_mut().set_velocity(vel);
         if self.base_mut().move_and_slide() {
             // TODO :: jump collisions
         }
+
+        // apply air damping
+        self.apply_air_damping(&mut vel);
+        self.base_mut().set_velocity(vel);
     }
 
     // [--------] FALLING [--------]
@@ -522,7 +542,7 @@ impl Fighter2D {
         let c_vel = self.base().get_velocity();
         let move_x = self.get_horizontal_velocity_with_min_mag(c_vel.x);
 
-        let new_vel = if self.fastfall {
+        let mut new_vel = if self.fastfall {
             Vector2::new(move_x, self.fastfall_speed)
         } else {
             self.get_velocity_plus_gravity(Vector2::new(move_x, c_vel.y), delta)
@@ -535,6 +555,10 @@ impl Fighter2D {
                 self.enter_standing_or_walking(move_input);
             }
         }
+
+        // apply air damping
+        self.apply_air_damping(&mut new_vel);
+        self.base_mut().set_velocity(new_vel);
     }
 
     fn enter_standing_or_walking(&mut self, input: Option<real>) {
@@ -570,7 +594,7 @@ impl Fighter2D {
     fn enter_airdash(&mut self) {
         self.state = PrimaryState::AirDash;
         self.dash_frames_remaining = self.airdash_frames;
-        self.anim.play_ex().name(self.facing.to_dash_anim()).done();
+        self.anim.play_ex().name("dash").done();
     }
 
     fn process_airdash(&mut self, delta: f64) {
@@ -601,7 +625,7 @@ impl Fighter2D {
     fn enter_ground_dash(&mut self) {
         self.state = PrimaryState::GroundDash;
         self.dash_frames_remaining = self.ground_dash_frames;
-        self.anim.play_ex().name(self.facing.to_dash_anim()).done();
+        self.anim.play_ex().name("dash").done();
     }
 
     fn process_ground_dash(&mut self, delta: f64) {
