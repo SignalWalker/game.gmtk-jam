@@ -100,12 +100,14 @@ grow_vertical = 2
 metadata/_edit_lock_ = true
 
 [node name="Avatar" parent="." unique_id=741533885 instance=ExtResource("2_naxgx")]
+dash_damping = 0.0
 position = Vector2(44, 403)
 
 [node name="Camera2D" type="Camera2D" parent="Avatar" unique_id=1269415781]
-position = Vector2(0, -100)
 zoom = Vector2(0.75, 0.75)
 process_callback = 0
+limit_left = 0
+limit_bottom = 482
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 2.0
