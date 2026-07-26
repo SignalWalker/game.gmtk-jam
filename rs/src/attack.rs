@@ -1,11 +1,15 @@
+use std::collections::HashSet;
+
 use godot::{
     classes::{
-        Area2D, IArea2D,
+        Area2D, AudioStream, AudioStreamPlayer, IArea2D,
         class_macros::private::virtuals::{Xrvrs::Gd, ZipReader::Vector2},
     },
-    obj::{WithBaseField, WithUserSignals},
-    prelude::{Base, GodotClass, Node, Node2D, Resource, godot_api},
+    obj::{NewAlloc, WithBaseField, WithUserSignals},
+    prelude::{Base, GodotClass, InstanceId, Node, Node2D, Resource, godot_api},
 };
+
+use crate::fighter::Fighter2D;
 
 // #[derive(GodotClass)]
 // #[class(init, base = Node2D)]
@@ -14,6 +18,7 @@ use godot::{
 // }
 
 pub trait Attackable {
+    fn vulnerable(&self, attack: &Gd<Attack2D>) -> bool;
     fn hit(&mut self, attack: &Gd<Attack2D>);
 }
 
@@ -45,18 +50,72 @@ pub struct Attack2D {
 
     #[var]
     pub source: Option<Gd<Node>>,
+
+    #[export]
+    pub hit_sound: Option<Gd<AudioStream>>,
+
+    #[export]
+    pub allow_multi_hits: bool,
+
+    hit_targets: HashSet<InstanceId>,
 }
 
 impl Attack2D {
-    fn on_body_entered(attack: Gd<Self>, body: Gd<Node2D>) {
+    pub fn accept_hit(&mut self, id: InstanceId) {
+        self.hit_targets.insert(id);
+    }
+
+    fn on_body_entered(mut attack: Gd<Self>, body: Gd<Node2D>) {
         if let Some(src) = attack.bind().source.as_ref()
             && body.instance_id() == src.instance_id()
         {
             return;
         }
-        let body_uncast = body.clone();
         if let Ok(mut body) = body.try_dynify::<dyn Attackable>() {
-            Self::on_hit(attack.clone(), body_uncast);
+            if !body.dyn_bind().vulnerable(&attack) {
+                return;
+            }
+
+            if !attack.bind().allow_multi_hits {
+                let b_id = body.instance_id();
+                if attack.bind().hit_targets.contains(&b_id) {
+                    return;
+                }
+                attack.bind_mut().hit_targets.insert(b_id);
+            }
+
+            if let Some(mut src) = attack
+                .bind()
+                .source
+                .as_ref()
+                .and_then(|src| src.clone().try_cast::<Fighter2D>().ok())
+            {
+                // play sound
+                if let Some(hit_sound) = attack.bind().hit_sound.as_ref() {
+                    let mut stream = AudioStreamPlayer::new_alloc();
+                    stream.set_stream(hit_sound);
+                    stream
+                        .signals()
+                        .tree_entered()
+                        .builder()
+                        .connect_self_gd(|mut stream| {
+                            stream.set_playing(true);
+                        });
+                    stream
+                        .signals()
+                        .finished()
+                        .builder()
+                        .connect_self_gd(|mut stream| {
+                            stream.queue_free();
+                        });
+                    src.add_child(&stream);
+                }
+
+                // inform source that we hit something
+                Fighter2D::attack_hit(src, &attack, &body);
+            }
+
+            // tell the target that we hit it
             body.dyn_bind_mut().hit(&attack);
         }
     }
@@ -68,11 +127,9 @@ impl Attack2D {
 
 #[godot_api]
 impl Attack2D {
-    #[func(virtual, gd_self)]
-    pub fn on_hit(
-        #[allow(unused_variables)] attack: Gd<Self>,
-        #[allow(unused_variables)] target: Gd<Node2D>,
-    ) {
+    #[func]
+    pub fn clear_hit_targets(&mut self) {
+        self.hit_targets.clear();
     }
 }
 

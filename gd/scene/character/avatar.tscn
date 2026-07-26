@@ -7,39 +7,55 @@
 [ext_resource type="Texture2D" uid="uid://ckt7w8iq0576h" path="res://art/character/astra/run/astra_run_rough00000.png" id="2_535uj"]
 [ext_resource type="Texture2D" uid="uid://cqhjnb861iob8" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00000.png" id="2_cd5wk"]
 [ext_resource type="Texture2D" uid="uid://b4kuurhpkn6yp" path="res://art/character/astra/jump/jump.png" id="2_gabma"]
+[ext_resource type="Texture2D" uid="uid://3w8b8iy01e34" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00001.png" id="2_pv6h7"]
 [ext_resource type="Texture2D" uid="uid://dogujps4iq35" path="res://art/character/astra/dash/ASTRA_DASH00001.png" id="2_xabps"]
 [ext_resource type="Texture2D" uid="uid://dvu8xxbvnok5w" path="res://art/character/astra/run/astra_run_rough00001.png" id="3_5uxvy"]
 [ext_resource type="Texture2D" uid="uid://lhpoq4aurkev" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK3.png" id="3_6uym6"]
 [ext_resource type="Texture2D" uid="uid://cf8s1f4i60c5r" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00001.png" id="3_cd5wk"]
+[ext_resource type="Texture2D" uid="uid://ddosekg2qcyb4" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00002.png" id="3_yu5wt"]
 [ext_resource type="Texture2D" uid="uid://b2smilam647gl" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00002.png" id="4_2n78d"]
 [ext_resource type="Texture2D" uid="uid://55b6lsl1ye70" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK4.png" id="4_c0odl"]
 [ext_resource type="Texture2D" uid="uid://bq12ka6led70h" path="res://art/character/astra/run/astra_run_rough00002.png" id="4_gabma"]
+[ext_resource type="Texture2D" uid="uid://cts6l0a0u4qny" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00003.png" id="4_ntr2i"]
+[ext_resource type="Texture2D" uid="uid://colt4lgc4ppot" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00004.png" id="5_4j6if"]
 [ext_resource type="Texture2D" uid="uid://cpq1ur1pk68r5" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00003.png" id="5_5rsqi"]
 [ext_resource type="Texture2D" uid="uid://4wk14f1rvd8h" path="res://art/character/astra/run/astra_run_rough00003.png" id="5_fg2vc"]
 [ext_resource type="Texture2D" uid="uid://cncs567fbe1kk" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK5.png" id="5_msxus"]
 [ext_resource type="Texture2D" uid="uid://wspjagxeoxrv" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK6.png" id="6_hydu0"]
 [ext_resource type="Texture2D" uid="uid://cxh4st1ndynxb" path="res://art/character/astra/run/astra_run_rough00004.png" id="6_piawc"]
+[ext_resource type="Texture2D" uid="uid://ck3qduo3f47w8" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00005.png" id="6_qwxkn"]
 [ext_resource type="Texture2D" uid="uid://brm30m41a6sn7" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00004.png" id="6_vo580"]
 [ext_resource type="Texture2D" uid="uid://b3bmc80vcwqe3" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK7.png" id="7_8iwac"]
+[ext_resource type="Texture2D" uid="uid://cxlvb4xfkoqlf" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00006.png" id="7_m42t4"]
 [ext_resource type="Texture2D" uid="uid://duqunuw1jmaeg" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00005.png" id="7_ua2gx"]
 [ext_resource type="Texture2D" uid="uid://c10n117pu85gt" path="res://art/character/astra/run/astra_run_rough00005.png" id="7_xabps"]
+[ext_resource type="Texture2D" uid="uid://dbuh2xo6ntq7f" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00007.png" id="8_2siwa"]
 [ext_resource type="Texture2D" uid="uid://cttuh126kj4jy" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK8.png" id="8_8s13k"]
 [ext_resource type="Texture2D" uid="uid://yg0eresxh50r" path="res://art/character/astra/run/astra_run_rough00006.png" id="8_cd5wk"]
 [ext_resource type="Texture2D" uid="uid://cxelqrrpgju3h" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00006.png" id="8_h3n4l"]
 [ext_resource type="Texture2D" uid="uid://csxfl51we0cl" path="res://art/character/astra/attack_ground_light_2/ASTRA_LIGHTATTACK9.png" id="9_1gm1m"]
 [ext_resource type="Texture2D" uid="uid://kxjj6t114u7u" path="res://art/character/astra/run/astra_run_rough00007.png" id="9_2n78d"]
 [ext_resource type="Texture2D" uid="uid://lfpdsbu3mn6f" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00007.png" id="9_e5sok"]
+[ext_resource type="Texture2D" uid="uid://cmwd5mby7vyv5" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00008.png" id="9_tk5p0"]
 [ext_resource type="Texture2D" uid="uid://bpuviw55ghc7b" path="res://art/character/astra/attack_ground_heavy/ASTRA_heavyattack00008.png" id="10_3cpxv"]
 [ext_resource type="Texture2D" uid="uid://byfhqe75vh3ur" path="res://art/character/astra/run/astra_run_rough00008.png" id="10_5rsqi"]
+[ext_resource type="Texture2D" uid="uid://mq0omwvf81mp" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00009.png" id="10_ucalc"]
 [ext_resource type="Texture2D" uid="uid://bykmw8e8vgmw5" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK2.png" id="11_2wqrf"]
+[ext_resource type="Texture2D" uid="uid://cuykbiiqwenru" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00010.png" id="11_hkcs2"]
 [ext_resource type="Texture2D" uid="uid://b54y8okvnmvn2" path="res://art/character/astra/run/astra_run_rough00009.png" id="11_vo580"]
 [ext_resource type="Texture2D" uid="uid://diedlg768flkv" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK3.png" id="12_76an5"]
+[ext_resource type="Texture2D" uid="uid://d03gjcsvyon3r" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00011.png" id="12_26122"]
+[ext_resource type="Texture2D" uid="uid://bomqlqoygt8qm" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00012.png" id="13_5xaav"]
 [ext_resource type="Texture2D" uid="uid://jybitkls1waa" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK4.png" id="13_molt4"]
+[ext_resource type="Texture2D" uid="uid://bldsg6ia14nf4" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00013.png" id="14_1618s"]
 [ext_resource type="Texture2D" uid="uid://c74lrygpvcu57" path="res://art/character/astra/hit/astra_HIT.png" id="14_f7gce"]
 [ext_resource type="Texture2D" uid="uid://dfdawch1giche" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK5.png" id="14_y3khx"]
 [ext_resource type="Texture2D" uid="uid://cykxw0rr61aex" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK6.png" id="15_oip8s"]
+[ext_resource type="Texture2D" uid="uid://cqepv7mjfxf4n" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00014.png" id="15_y5tqf"]
+[ext_resource type="Texture2D" uid="uid://djmasrh4lgpm" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00015.png" id="16_h1bo0"]
 [ext_resource type="Texture2D" uid="uid://u4myykxafqx5" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK7.png" id="16_m7m4j"]
 [ext_resource type="Texture2D" uid="uid://knhbsgyxy8sv" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK8.png" id="17_451ld"]
+[ext_resource type="Texture2D" uid="uid://dre84idu3pcu2" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00016.png" id="17_yyb5e"]
 [ext_resource type="Texture2D" uid="uid://cvf0v5a8hyisu" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK9.png" id="18_0kv7q"]
 [ext_resource type="Texture2D" uid="uid://08c5dq6hn1bu" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK3.png" id="27_xbxo4"]
 [ext_resource type="Texture2D" uid="uid://be8mywtgelgbl" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK4.png" id="28_tkjuv"]
@@ -51,6 +67,7 @@
 [ext_resource type="Texture2D" uid="uid://dwekt60j2ljmd" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK10.png" id="34_rmeh5"]
 [ext_resource type="Texture2D" uid="uid://bencx6c0irb7q" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK11.png" id="35_u07xs"]
 [ext_resource type="Texture2D" uid="uid://ixdw4kbgkv7" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK12.png" id="36_h2ejc"]
+[ext_resource type="AudioStream" uid="uid://crp71g0fidgas" path="res://sound/attack/half-life-crowbar.mp3" id="52_suxyw"]
 
 [sub_resource type="Animation" id="Animation_uwhti"]
 length = 0.001
@@ -90,6 +107,166 @@ tracks/2/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationState:cancellable")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AttackGroundLight1:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AttackGroundLight2:monitoring")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AttackGroundLight3:monitoring")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("AnimationState:anim_finished")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("AttackAirHeavy:monitoring")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_suxyw"]
+resource_name = "attack_air_heavy"
+length = 1.3333417064033448
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334, 0.4166667, 0.5, 0.5833334, 0.6666667, 0.75, 0.8333334, 0.9166667, 1, 1.0833334, 1.1666667, 1.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_pv6h7"), ExtResource("3_yu5wt"), ExtResource("4_ntr2i"), ExtResource("5_4j6if"), ExtResource("6_qwxkn"), ExtResource("7_m42t4"), ExtResource("8_2siwa"), ExtResource("9_tk5p0"), ExtResource("10_ucalc"), ExtResource("11_hkcs2"), ExtResource("12_26122"), ExtResource("13_5xaav"), ExtResource("14_1618s"), ExtResource("15_y5tqf"), ExtResource("16_h1bo0"), ExtResource("17_yyb5e")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackAirHeavy:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.16666667, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationState:cancellable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationState:anim_finished")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.3333334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AttackAirHeavy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.25, 0.33333334, 0.4166667, 0.5, 0.5833334, 0.6666667, 0.75, 0.8333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [],
+"method": &"clear_hit_targets"
+}, {
+"args": [],
+"method": &"clear_hit_targets"
+}, {
+"args": [],
+"method": &"clear_hit_targets"
+}, {
+"args": [],
+"method": &"clear_hit_targets"
+}, {
+"args": [],
+"method": &"clear_hit_targets"
+}, {
+"args": [],
+"method": &"clear_hit_targets"
+}, {
+"args": [],
+"method": &"clear_hit_targets"
+}, {
+"args": [],
+"method": &"clear_hit_targets"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_piawc"]
 resource_name = "attack_ground_heavy"
@@ -119,6 +296,30 @@ tracks/1/keys = {
 "update": 1,
 "values": [true, false]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationState:cancellable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationState:anim_finished")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.75),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_3cpxv"]
 resource_name = "attack_ground_light_1"
@@ -135,6 +336,42 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("11_2wqrf"), ExtResource("12_76an5"), ExtResource("13_molt4"), ExtResource("14_y3khx"), ExtResource("15_oip8s"), ExtResource("16_m7m4j"), ExtResource("17_451ld"), ExtResource("18_0kv7q")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackGroundLight1:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.16666667, 0.4166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationState:cancellable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4166667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationState:anim_finished")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.6666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_0kv7q"]
@@ -153,6 +390,42 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("2_0dms8"), ExtResource("3_6uym6"), ExtResource("4_c0odl"), ExtResource("5_msxus"), ExtResource("6_hydu0"), ExtResource("7_8iwac"), ExtResource("8_8s13k"), ExtResource("9_1gm1m")]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackGroundLight2:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.16666667, 0.33333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationState:cancellable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.33333334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationState:anim_finished")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.6666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_1gm1m"]
 resource_name = "attack_ground_light_3"
@@ -169,6 +442,42 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("27_xbxo4"), ExtResource("28_tkjuv"), ExtResource("29_iyh3h"), ExtResource("30_5jban"), ExtResource("31_kl7x3"), ExtResource("32_pjsqd"), ExtResource("33_p54o7"), ExtResource("34_rmeh5"), ExtResource("35_u07xs"), ExtResource("36_h2ejc")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AttackGroundLight3:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.25, 0.4166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationState:cancellable")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4166667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationState:anim_finished")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.8333334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_fg2vc"]
@@ -339,6 +648,7 @@ length = 0.001
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uwhti"]
 _data = {
 &"RESET": SubResource("Animation_uwhti"),
+&"attack_air_heavy": SubResource("Animation_suxyw"),
 &"attack_ground_heavy": SubResource("Animation_piawc"),
 &"attack_ground_light_1": SubResource("Animation_3cpxv"),
 &"attack_ground_light_2": SubResource("Animation_0kv7q"),
@@ -356,8 +666,16 @@ _data = {
 radius = 22.0
 height = 98.0
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_h2ejc"]
+random_pitch = 1.9999999
+streams_count = 1
+stream_0/stream = ExtResource("52_suxyw")
+
 [node name="Avatar" type="Fighter2D" unique_id=741533885]
 collision_layer = 2
+
+[node name="AnimationState" type="AnimationState" parent="." unique_id=1120024876]
+unique_name_in_owner = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1336997657]
 unique_name_in_owner = true
@@ -383,12 +701,67 @@ metadata/_edit_lock_ = true
 damage = 12
 knockback = Vector2(256, -128)
 hitstun_frames = 12
+hit_sound = SubResource("AudioStreamRandomizer_h2ejc")
+visible = false
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AttackGroundHeavy" unique_id=33240530]
+polygon = PackedVector2Array(9, -79, 18, -78, 51, -63, 81, -50, 99, -27, 85, 13, 76, 23, 44, 38, 9, 51, -4, 15, 2, 13, 25, 11, 46, -1, 64, -23, 59, -36, 28, -66)
+metadata/_edit_lock_ = true
+
+[node name="AttackGroundLight1" type="Attack2D" parent="." unique_id=207978615]
+knockback = Vector2(0, -12)
+hitstun_frames = 12
+visible = false
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AttackGroundLight1" unique_id=876826816]
+polygon = PackedVector2Array(17, -45, 32, -42, 54, -33, 72, -24, 75, -19, 71, -11, 55, 2, 27, 14, 5, 21, -23, 24, -42, 24, -21, 12, 4, 10, 18, 4, 32, -5, 37, -13, 30, -22, 12, -26)
+metadata/_edit_lock_ = true
+
+[node name="AttackGroundLight2" type="Attack2D" parent="." unique_id=1415087630]
+knockback = Vector2(0, -12)
+hitstun_frames = 12
+visible = false
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AttackGroundLight2" unique_id=696912390]
+polygon = PackedVector2Array(2, -20, 45, -7, 61, -5, 78, -11, 83, -22, 74, -30, 43, -36, 21, -35, 14, -33)
+
+[node name="AttackGroundLight3" type="Attack2D" parent="." unique_id=414369650]
+knockback = Vector2(32, -1)
+hitstun_frames = 24
+visible = false
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+monitorable = false
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AttackGroundLight3" unique_id=1728179683]
+polygon = PackedVector2Array(-31, -76, -6, -73, 18, -62, 38, -51, 50, -33, 45, -13, 30, -1, -15, 0, -71, 35, -50, 38, -1, 37, 24, 36, 49, 19, 74, -14, 79, -31, 77, -47, 66, -62, 41, -72, 15, -76, -11, -78)
+
+[node name="AttackAirHeavy" type="Attack2D" parent="." unique_id=1702536230]
 collision_layer = 4
 collision_mask = 2
 monitoring = false
 monitorable = false
 metadata/_edit_lock_ = true
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AttackGroundHeavy" unique_id=33240530]
-polygon = PackedVector2Array(9, -79, 18, -78, 51, -63, 81, -50, 99, -27, 85, 13, 76, 23, 44, 38, 9, 51, -4, 15, 2, 13, 25, 11, 46, -1, 64, -23, 59, -36, 28, -66)
-metadata/_edit_lock_ = true
+[node name="AttackAirLight1" type="Attack2D" parent="." unique_id=487181942]

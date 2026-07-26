@@ -1,7 +1,6 @@
 [gd_scene format=4 uid="uid://bnf8ciupwm4vt"]
 
 [ext_resource type="Texture2D" uid="uid://cblcxyv3qpkj8" path="res://art/character/test.png" id="1_lvrkv"]
-[ext_resource type="PackedScene" uid="uid://1svy2wscsuk1" path="res://scene/attack/fireball.tscn" id="2_gnh3c"]
 [ext_resource type="PackedScene" uid="uid://b15d0or3erbra" path="res://scene/character/avatar.tscn" id="2_naxgx"]
 [ext_resource type="Texture2D" uid="uid://lvbhg3rij5uc" path="res://art/tile/test_tile.png" id="3_gnh3c"]
 
@@ -12,14 +11,11 @@ script/source = "extends VBoxContainer
 @export
 var frames: Texture2D
 
-func _ready() -> void:
-	%Avatar.enter_state.connect(self.on_state)
-
 func push_state(frame: int) -> void:
 	var rect := TextureRect.new()
 	var atlas := AtlasTexture.new()
 	atlas.atlas = self.frames
-	atlas.region = Rect2((frame % 3) * 64, floor((frame / 3)) * 32, 64.0, 32.0)
+	atlas.region = Rect2((frame % 3) * 64, floor((frame as float / 3.0)) * 32, 64.0, 32.0)
 	rect.texture = atlas
 	self.add_child(rect)
 
@@ -52,69 +48,6 @@ normal = Vector2(1, 0)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gnh3c"]
 normal = Vector2(-1, 0)
-
-[sub_resource type="Animation" id="Animation_naxgx"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Fireball:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Fireball:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_wvtyy"]
-resource_name = "attack_test"
-length = 4.000001875283011
-loop_mode = 1
-step = 0.016666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Fireball:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.0000001, 2.0000017, 3.000002, 4.000002),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(-46, 130), Vector2(-210, 74), Vector2(-174, -29), Vector2(0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Fireball:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(-1, 1), Vector2(1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_naxgx"]
-_data = {
-&"RESET": SubResource("Animation_naxgx"),
-&"attack_test": SubResource("Animation_wvtyy")
-}
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lvrkv"]
 texture = ExtResource("3_gnh3c")
@@ -156,18 +89,21 @@ metadata/_edit_lock_ = true
 
 [node name="Avatar" parent="." unique_id=741533885 instance=ExtResource("2_naxgx")]
 unique_name_in_owner = true
-position = Vector2(44, 403)
+position = Vector2(401, 178)
+metadata/_edit_group_ = true
 
 [node name="Camera2D" type="Camera2D" parent="Avatar" unique_id=1269415781]
 zoom = Vector2(0.75, 0.75)
 process_callback = 0
 limit_left = 0
+limit_right = 800
 limit_bottom = 482
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 2.0
+metadata/_edit_lock_ = true
 
-[node name="FighterController" type="FighterController" parent="Avatar" unique_id=67646944]
+[node name="FighterController" type="FighterControllerPlayer" parent="Avatar" unique_id=967211163]
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=2070460119]
 position = Vector2(0, 450)
@@ -185,8 +121,7 @@ metadata/_edit_lock_ = true
 shape = SubResource("WorldBoundaryShape2D_wvtyy")
 
 [node name="WallRight" type="StaticBody2D" parent="." unique_id=1468207171]
-position = Vector2(600, 0)
-collision_layer = 0
+position = Vector2(800, 0)
 collision_mask = 0
 metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
@@ -194,25 +129,13 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight" unique_id=1663028339]
 shape = SubResource("WorldBoundaryShape2D_gnh3c")
 
-[node name="AttackTest" type="Node2D" parent="." unique_id=1371300542]
-position = Vector2(321, 123)
-metadata/_edit_group_ = true
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="AttackTest" unique_id=1250432377]
-deterministic = true
-root_motion_local = true
-callback_mode_process = 0
-callback_mode_method = 1
-libraries/ = SubResource("AnimationLibrary_naxgx")
-autoplay = &"attack_test"
-
-[node name="Fireball" parent="AttackTest" unique_id=756207336 instance=ExtResource("2_gnh3c")]
-knockback = Vector2(256, -256)
-
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1718760583]
 z_index = -1
-tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAQAA4AAAAAAAAAAAARAA4AAAAAAAAAAAASAA4AAAAAAAAAAAATAA4AAAAAAAAAAAAUAA4AAAAAAAAAAAAVAA4AAAAAAAAAAAAWAA4AAAAAAAAAAAAXAA4AAAAAAAAAAAAYAA4AAAAAAAAAAAAZAA4AAAAAAAAAAAAaAA4AAAAAAAAAAAAbAA4AAAAAAAAAAAAcAA4AAAAAAAAAAAAdAA4AAAAAAAAAAAAeAA4AAAAAAAAAAAAfAA4AAAAAAAAAAAAgAA4AAAAAAAAAAAAhAA4AAAAAAAAAAAAiAA4AAAAAAAAAAAAjAA4AAAAAAAAAAAAkAA4AAAAAAAAAAAAlAA4AAAAAAAAAAAAmAA4AAAAAAAAAAAAnAA4AAAAAAAAAAAAoAA4AAAAAAAAAAAApAA4AAAAAAAAAAAAqAA4AAAAAAAAAAAArAA4AAAAAAAAAAAAsAA4AAAAAAAAAAAAtAA4AAAAAAAAAAAAuAA4AAAAAAAAAAAAvAA4AAAAAAAAAAAAEAA0AAAAAAAAAAAAJAA0AAAAAAAAAAAAOAA0AAAAAAAAAAAATAA0AAAAAAAAAAAAYAA0AAAAAAAAAAAAdAA0AAAAAAAAAAAAiAA0AAAAAAAAAAAAnAA0AAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAQAA4AAAAAAAAAAAARAA4AAAAAAAAAAAASAA4AAAAAAAAAAAATAA4AAAAAAAAAAAAUAA4AAAAAAAAAAAAVAA4AAAAAAAAAAAAWAA4AAAAAAAAAAAAXAA4AAAAAAAAAAAAYAA4AAAAAAAAAAAAZAA4AAAAAAAAAAAAaAA4AAAAAAAAAAAAbAA4AAAAAAAAAAAAcAA4AAAAAAAAAAAAdAA4AAAAAAAAAAAAeAA4AAAAAAAAAAAAfAA4AAAAAAAAAAAAgAA4AAAAAAAAAAAAhAA4AAAAAAAAAAAAiAA4AAAAAAAAAAAAjAA4AAAAAAAAAAAAkAA4AAAAAAAAAAAAlAA4AAAAAAAAAAAAmAA4AAAAAAAAAAAAnAA4AAAAAAAAAAAAoAA4AAAAAAAAAAAApAA4AAAAAAAAAAAAqAA4AAAAAAAAAAAArAA4AAAAAAAAAAAAsAA4AAAAAAAAAAAAtAA4AAAAAAAAAAAAuAA4AAAAAAAAAAAAvAA4AAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_naxgx")
 
-[node name="Avatar2" parent="." unique_id=1784894730 instance=ExtResource("2_naxgx")]
+[node name="Enemy" parent="." unique_id=1784894730 instance=ExtResource("2_naxgx")]
 position = Vector2(350, 395)
+
+[node name="FighterControllerAi" type="FighterControllerAi" parent="Enemy" unique_id=1708845999]
+enable = false
