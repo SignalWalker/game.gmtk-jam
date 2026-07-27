@@ -6,7 +6,7 @@ script/source = "extends Button
 
 func _enter_tree() -> void:
 	self.pressed.connect(func() -> void:
-		SceneManager.swap_scene(SceneManagerNode.load_to_node(&\"uid://bnf8ciupwm4vt\"))
+		SceneStack.get_nearest(self).swap_scene(SceneStack.load_to_node(&\"uid://bnf8ciupwm4vt\"))
 	)
 
 func _ready() -> void:

@@ -26,7 +26,7 @@ godot = { version = "^0.5", features = ["api-4-7", "register-docs"] }
 ## small utilities
 godot-utils = { git = "https://github.com/SignalWalker/godot.lib.godot-utils" }
 ## the scene manager, with some extra utilities
-scene-manager = { git = "https://github.com/SignalWalker/godot.lib.scene-manager-rs.git", version = "^0.1", features = [
+scene-manager = { git = "https://github.com/SignalWalker/godot.lib.scene-manager-rs.git", version = "^0.2", features = [
   "api-4-7",
 ] }
 ## a tiny library that helps with logging things to the console
