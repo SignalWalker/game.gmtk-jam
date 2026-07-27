@@ -1,8 +1,8 @@
-[gd_scene format=4 uid="uid://bnf8ciupwm4vt"]
+[gd_scene format=3 uid="uid://bnf8ciupwm4vt"]
 
 [ext_resource type="Texture2D" uid="uid://cblcxyv3qpkj8" path="res://art/character/test.png" id="1_lvrkv"]
+[ext_resource type="Texture2D" uid="uid://bm50437gah4kg" path="res://art/bg/moon.png" id="2_lvrkv"]
 [ext_resource type="PackedScene" uid="uid://b15d0or3erbra" path="res://scene/character/avatar.tscn" id="2_naxgx"]
-[ext_resource type="Texture2D" uid="uid://lvbhg3rij5uc" path="res://art/tile/test_tile.png" id="3_gnh3c"]
 
 [sub_resource type="GDScript" id="GDScript_lvrkv"]
 resource_name = "state_debug"
@@ -49,16 +49,6 @@ normal = Vector2(1, 0)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_gnh3c"]
 normal = Vector2(-1, 0)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lvrkv"]
-texture = ExtResource("3_gnh3c")
-texture_region_size = Vector2i(32, 32)
-use_texture_padding = false
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_naxgx"]
-tile_size = Vector2i(32, 32)
-sources/0 = SubResource("TileSetAtlasSource_lvrkv")
-
 [node name="Training" type="Node2D" unique_id=134973433]
 metadata/_edit_lock_ = true
 
@@ -79,13 +69,12 @@ frames = ExtResource("1_lvrkv")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=798801174]
 layer = -1
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=2052759123]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_lock_ = true
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1006730377]
+offset_right = 600.0
+offset_bottom = 450.0
+texture = ExtResource("2_lvrkv")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Avatar" parent="." unique_id=741533885 instance=ExtResource("2_naxgx")]
 unique_name_in_owner = true
@@ -129,13 +118,7 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight" unique_id=1663028339]
 shape = SubResource("WorldBoundaryShape2D_gnh3c")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1718760583]
-z_index = -1
-tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAQAA4AAAAAAAAAAAARAA4AAAAAAAAAAAASAA4AAAAAAAAAAAATAA4AAAAAAAAAAAAUAA4AAAAAAAAAAAAVAA4AAAAAAAAAAAAWAA4AAAAAAAAAAAAXAA4AAAAAAAAAAAAYAA4AAAAAAAAAAAAZAA4AAAAAAAAAAAAaAA4AAAAAAAAAAAAbAA4AAAAAAAAAAAAcAA4AAAAAAAAAAAAdAA4AAAAAAAAAAAAeAA4AAAAAAAAAAAAfAA4AAAAAAAAAAAAgAA4AAAAAAAAAAAAhAA4AAAAAAAAAAAAiAA4AAAAAAAAAAAAjAA4AAAAAAAAAAAAkAA4AAAAAAAAAAAAlAA4AAAAAAAAAAAAmAA4AAAAAAAAAAAAnAA4AAAAAAAAAAAAoAA4AAAAAAAAAAAApAA4AAAAAAAAAAAAqAA4AAAAAAAAAAAArAA4AAAAAAAAAAAAsAA4AAAAAAAAAAAAtAA4AAAAAAAAAAAAuAA4AAAAAAAAAAAAvAA4AAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_naxgx")
-
 [node name="Enemy" parent="." unique_id=1784894730 instance=ExtResource("2_naxgx")]
 position = Vector2(350, 395)
 
 [node name="FighterControllerAi" type="FighterControllerAi" parent="Enemy" unique_id=1708845999]
-enable = false
