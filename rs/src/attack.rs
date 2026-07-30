@@ -6,7 +6,7 @@ use godot::{
         class_macros::private::virtuals::{Xrvrs::Gd, ZipReader::Vector2},
     },
     obj::{NewAlloc, WithBaseField, WithUserSignals},
-    prelude::{Base, GodotClass, InstanceId, Node, Node2D, Resource, godot_api},
+    prelude::{Base, GodotClass, InstanceId, Node, Node2D, godot_api},
 };
 
 use crate::fighter::Fighter2D;

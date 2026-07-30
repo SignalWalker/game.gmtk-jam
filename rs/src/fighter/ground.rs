@@ -2,7 +2,7 @@ use godot::classes::class_macros::private::virtuals::ZipReader::Vector2;
 
 use crate::{
     fighter::{Fighter2D, FighterState},
-    input::Action,
+    input::{Action, AxisDir},
 };
 
 impl Fighter2D {
@@ -32,7 +32,7 @@ impl Fighter2D {
                 self.process_attack_ground_heavy(delta);
             }
             _ => {
-                if self.get_horizontal_input().is_some() {
+                if self.get_horizontal_input() != AxisDir::Neutral {
                     self.enter_walking();
                     self.process_walking(delta);
                 }
@@ -52,7 +52,8 @@ impl Fighter2D {
 
     pub(super) fn process_walking(&mut self, delta: f64) {
         // get input
-        let Some(input) = self.get_horizontal_input() else {
+        let input = self.get_horizontal_input();
+        if input == AxisDir::Neutral {
             self.enter_standing();
             self.process_standing(delta);
             return;

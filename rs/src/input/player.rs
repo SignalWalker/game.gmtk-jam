@@ -1,17 +1,15 @@
-use std::collections::VecDeque;
+use std::collections::{HashSet, VecDeque};
 
 use godot::{
-    classes::{
-        Input,
-        class_macros::private::virtuals::ZipReader::{Vector2, real},
-    },
+    classes::{Input, InputEvent},
     obj::{Singleton as _, WithBaseField as _},
     prelude::{Base, GodotClass, INode, Node, godot_api, godot_dyn},
 };
+use godot_utils::ArrayExt;
 
 use crate::{
     fighter::{FacingDirection, Fighter2D},
-    input::{Action, AnalogMovementFrame, FighterController},
+    input::{Action, AxisDir, FighterController, InputAction, InputMixer, MovementFrame},
 };
 
 pub const AVATAR_UP: &str = "avatar_move_up";
@@ -78,32 +76,26 @@ pub struct FighterControllerPlayer {
     #[init(val = 1)]
     pub fastfall_window: u32,
 
-    #[export]
-    #[init(val = 0.5)]
-    pub fastfall_min_strength: real,
-
-    #[export]
-    #[init(val = 0.5)]
-    pub fastfall_min_diff: real,
-
-    #[export]
-    #[init(val = 0.25)]
-    pub dash_min_strength: real,
-
-    movement_buffer: VecDeque<AnalogMovementFrame>,
+    movement_buffer: VecDeque<MovementFrame>,
 
     pub maintaining_jump: bool,
 
     frame_count: u64,
 
     action: Option<QueuedAction>,
+
+    input: Option<InputMixer>,
+
+    action_dash: &'static str,
+    action_attack_light: &'static str,
+    action_attack_heavy: &'static str,
 }
 
 #[godot_dyn]
 impl FighterController for FighterControllerPlayer {
     fn preprocess(&mut self, _: &Fighter2D) {}
 
-    fn current_horizontal(&self, _: &Fighter2D) -> Option<real> {
+    fn current_horizontal(&self, _: &Fighter2D) -> AxisDir {
         self.current_horizontal()
     }
 
@@ -129,30 +121,11 @@ impl FighterController for FighterControllerPlayer {
 }
 
 impl FighterControllerPlayer {
-    pub fn current_horizontal(&self) -> Option<real> {
-        let res = Input::singleton().get_axis(AVATAR_LEFT, AVATAR_RIGHT);
-        if res.abs() <= self.movement_deadzone {
-            None
-        } else {
-            Some(res)
-        }
+    pub fn current_horizontal(&self) -> AxisDir {
+        self.movement_buffer
+            .front()
+            .map_or(AxisDir::Neutral, |m| m.horizontal)
     }
-
-    // pub fn current_movement(&self) -> Option<Vector2> {
-    //     let res = AnalogMovementFrame::capture(
-    //         self.movement_deadzone,
-    //         AVATAR_LEFT,
-    //         AVATAR_RIGHT,
-    //         AVATAR_UP,
-    //         AVATAR_DOWN,
-    //     )
-    //     .0;
-    //     if res.is_zero_approx() {
-    //         None
-    //     } else {
-    //         Some(res)
-    //     }
-    // }
 
     pub fn peek_action(&self) -> Option<Action> {
         self.action.as_ref().map(|f| f.kind)
@@ -163,24 +136,27 @@ impl FighterControllerPlayer {
     }
 
     pub fn wants_fastfall(&self) -> bool {
-        fn get_strength(v: Vector2) -> f32 {
-            (-v).dot(Vector2::DOWN).clamp(-1.0, 1.0)
+        fn is_fastfall_movement(frame: MovementFrame) -> bool {
+            frame.vertical == AxisDir::Negative && frame.horizontal == AxisDir::Neutral
         }
+
         let mut frames = self
             .movement_buffer
             .iter()
             .take(self.fastfall_window.saturating_add(1).saturating_cast())
-            .map(|f| f.0);
+            .copied();
         let Some(current) = frames.next() else {
             return false;
         };
-        let strength = get_strength(current);
 
-        if strength < self.fastfall_min_strength {
+        // if our current movement is not a fastfall frame, we don't care
+        if !is_fastfall_movement(current) {
             return false;
         }
+
+        //
         for frame in frames {
-            if (strength - get_strength(frame)) >= self.fastfall_min_diff {
+            if !is_fastfall_movement(frame) {
                 return true;
             }
         }
@@ -188,11 +164,27 @@ impl FighterControllerPlayer {
     }
 
     pub fn should_maintain_dash(&self, dash_dir: FacingDirection) -> bool {
-        let Some(strength) = self.current_horizontal() else {
-            return false;
-        };
-        (dash_dir == FacingDirection::Right && strength >= self.dash_min_strength)
-            || (dash_dir == FacingDirection::Left && strength <= -self.dash_min_strength)
+        let c = self.current_horizontal();
+        (dash_dir == FacingDirection::Right && c == AxisDir::Positive)
+            || (dash_dir == FacingDirection::Left && c == AxisDir::Negative)
+    }
+
+    fn get_movement_frame(&self) -> Option<MovementFrame> {
+        self.input.as_ref().and_then(|i| {
+            i.get_movement_frame(
+                self.movement_deadzone,
+                InputAction::AvatarLeft,
+                InputAction::AvatarRight,
+                InputAction::AvatarDown,
+                InputAction::AvatarUp,
+            )
+        })
+    }
+
+    fn get_dominant_action(&self) -> Option<Action> {
+        self.input
+            .as_ref()
+            .and_then(InputMixer::get_dominant_action)
     }
 }
 
@@ -231,19 +223,50 @@ impl INode for FighterControllerPlayer {
             .and_then(|p| p.try_cast::<Fighter2D>().ok())
         {
             p.bind_mut().register_controller(self.to_gd());
+
+            if self.input.is_none()
+                && let Some(p) = p.get_parent()
+            {
+                let self_id = self.base().instance_id();
+                let mut mixer_index = 0;
+
+                for fighter in p.get_children().into_iter_shared_of_type::<Fighter2D>() {
+                    for controller in fighter
+                        .get_children()
+                        .into_iter_shared_of_type::<FighterControllerPlayer>()
+                    {
+                        if controller.instance_id() == self_id {
+                            continue;
+                        }
+                        if controller.bind().input.is_some() {
+                            mixer_index += 1;
+                        }
+                    }
+                }
+
+                tracing::trace!(index = mixer_index, name = %self.base().get_name(), "register fighter controller mixer");
+                let mixer = InputMixer::new(mixer_index);
+                mixer.register();
+                match mixer_index {
+                    0 => mixer.register_device(0),
+                    1 => {
+                        mixer.register_device(1);
+                        mixer.register_device(InputEvent::DEVICE_ID_KEYBOARD);
+                        mixer.register_device(InputEvent::DEVICE_ID_MOUSE);
+                    }
+                    _ => {}
+                }
+                self.input = Some(mixer);
+            }
         }
     }
 
     fn physics_process(&mut self, _delta: f64) {
         // update the movement buffer
-        let movement = AnalogMovementFrame::capture(
-            self.movement_deadzone,
-            AVATAR_LEFT,
-            AVATAR_RIGHT,
-            AVATAR_DOWN,
-            AVATAR_UP,
-        );
-        self.movement_buffer.push_front(movement);
+        let movement = self.get_movement_frame();
+
+        self.movement_buffer
+            .push_front(movement.unwrap_or(MovementFrame::NEUTRAL));
         if self.movement_buffer.len() > self.movement_buffer_len.saturating_cast::<usize>() {
             self.movement_buffer.pop_back();
         }
@@ -263,34 +286,18 @@ impl INode for FighterControllerPlayer {
             }
         }
 
-        // check for new actions
-        let input = Input::singleton();
-        let act = [
-            QueuedAction::capture(&input, Action::AttackLight),
-            QueuedAction::capture(&input, Action::AttackHeavy),
-            QueuedAction::capture(&input, Action::Dash),
-            QueuedAction::capture(&input, Action::Jump),
-        ]
-        .into_iter()
-        .fold(None, |acc, right| {
-            let Some(left) = acc else { return right };
-            let Some(right) = right else {
-                return Some(left);
-            };
-            if left.kind < right.kind {
-                Some(right)
-            } else {
-                Some(left)
-            }
-        });
-
-        if let Some(action) = act {
-            self.action = Some(action);
+        // insert new actions
+        if let Some(action) = self.get_dominant_action() {
+            self.action = Some(QueuedAction {
+                kind: action,
+                age: 0,
+            });
         }
 
         // update jump maintanence
-        self.maintaining_jump = input.is_action_pressed(AVATAR_JUMP);
-
-        self.frame_count = self.frame_count.wrapping_add(1);
+        self.maintaining_jump = self
+            .input
+            .as_ref()
+            .is_some_and(|i| i.is_action_pressed(InputAction::Jump));
     }
 }

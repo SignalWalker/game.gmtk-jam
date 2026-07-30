@@ -7,7 +7,7 @@ use godot_utils::ArrayExt as _;
 use crate::{
     attack::Attack2D,
     fighter::{FacingDirection, Fighter2D},
-    input::Action,
+    input::{Action, AxisDir},
 };
 
 impl Fighter2D {
@@ -17,31 +17,31 @@ impl Fighter2D {
         self.base_mut().move_and_slide()
     }
 
-    pub(super) fn get_horizontal_input(&self) -> Option<real> {
+    pub(super) fn get_horizontal_input(&self) -> AxisDir {
         self.controller
             .as_ref()
-            .and_then(|c| c.dyn_bind().current_horizontal(self))
+            .map_or(AxisDir::Neutral, |c| c.dyn_bind().current_horizontal(self))
     }
 
     pub(super) fn apply_walk_input(&mut self) {
-        if let Some(input) = self.get_horizontal_input() {
-            self.velocity.x = self.walk_speed.copysign(input);
+        let input = self.get_horizontal_input();
+        if input != AxisDir::Neutral {
+            self.velocity.x = input.with_magnitude(self.walk_speed);
         }
     }
 
     pub(super) fn apply_walk_input_preserving(&mut self) {
-        let Some(input) = self.get_horizontal_input() else {
-            return;
+        let input = self.get_horizontal_input();
+        let speed = match input {
+            AxisDir::Positive => self.walk_speed,
+            AxisDir::Neutral => return,
+            AxisDir::Negative => -self.walk_speed,
         };
 
-        let speed = self.walk_speed.copysign(input);
-
         // if we're trying to move in the opposite direction, do it
-        if speed.is_sign_positive() != self.velocity.x.is_sign_positive() {
-            self.velocity.x = speed;
-        }
-
-        if speed.abs() > self.velocity.x.abs() {
+        if speed.is_sign_positive() != self.velocity.x.is_sign_positive()
+            || speed.abs() > self.velocity.x.abs()
+        {
             self.velocity.x = speed;
         }
     }
@@ -89,7 +89,7 @@ impl Fighter2D {
             .is_some_and(|c| c.dyn_bind().wants_fastfall(self))
     }
 
-    pub(super) fn update_facing(&mut self, move_input: real) {
+    pub(super) fn update_facing(&mut self, input: AxisDir) {
         fn set_attack_scales(fighter: &mut Fighter2D, scale: Vector2) {
             for mut attack in fighter
                 .base()
@@ -100,17 +100,18 @@ impl Fighter2D {
             }
         }
 
-        self.facing = FacingDirection::from_input(move_input);
-
-        match self.facing {
-            FacingDirection::Left => {
-                self.sprite.set_flip_h(true);
-                set_attack_scales(self, Vector2::new(-1.0, 1.0));
-            }
-            FacingDirection::Right => {
+        match input {
+            AxisDir::Positive => {
+                self.facing = FacingDirection::Right;
                 self.sprite.set_flip_h(false);
                 set_attack_scales(self, Vector2::new(1.0, 1.0));
             }
+            AxisDir::Negative => {
+                self.facing = FacingDirection::Left;
+                self.sprite.set_flip_h(true);
+                set_attack_scales(self, Vector2::new(-1.0, 1.0));
+            }
+            _ => {}
         }
     }
 
@@ -134,11 +135,10 @@ impl Fighter2D {
         collided
     }
 
-    pub(super) fn enter_standing_or_walking(&mut self, input: Option<real>) {
-        if input.is_some() {
-            self.enter_walking()
-        } else {
-            self.enter_standing()
+    pub(super) fn enter_standing_or_walking(&mut self, input: AxisDir) {
+        match input {
+            AxisDir::Neutral => self.enter_standing(),
+            _ => self.enter_walking(),
         }
     }
 
@@ -154,13 +154,9 @@ impl Fighter2D {
         false
     }
 
-    pub(super) fn enter_standing_walking_or_falling(
-        &mut self,
-        collided: bool,
-        move_input: Option<real>,
-    ) {
+    pub(super) fn enter_standing_walking_or_falling(&mut self, collided: bool, input: AxisDir) {
         if collided && self.collided_with_floor() {
-            self.enter_standing_or_walking(move_input)
+            self.enter_standing_or_walking(input)
         } else {
             self.enter_falling()
         }

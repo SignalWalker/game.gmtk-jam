@@ -6,13 +6,13 @@ use godot::{
         ZipReader::{Vector2, real},
     },
     obj::WithBaseField as _,
-    prelude::{Base, GodotClass, INode, Node, OnReady, godot_api, godot_dyn},
+    prelude::{Base, GodotClass, INode, Node, godot_api, godot_dyn},
 };
 use godot_utils::ArrayExt;
 
 use crate::{
     fighter::{FacingDirection, Fighter2D, FighterState},
-    input::{Action, FighterController},
+    input::{Action, AxisDir, FighterController},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -99,19 +99,23 @@ impl FighterController for FighterControllerAi {
         }
     }
 
-    fn current_horizontal(&self, _: &Fighter2D) -> Option<real> {
+    fn current_horizontal(&self, _: &Fighter2D) -> AxisDir {
         if !self.enable {
-            return None;
+            return AxisDir::Neutral;
         }
 
-        let o_snap = self.opp_prediction()?;
-        let s_snap = self.self_prediction()?;
+        let Some(o_snap) = self.opp_prediction() else {
+            return AxisDir::Neutral;
+        };
+        let Some(s_snap) = self.self_prediction() else {
+            return AxisDir::Neutral;
+        };
         let diff = o_snap.position.x - s_snap.position.x;
 
         if diff.abs() >= self.attack_ground_heavy_dist || !self.is_facing_opp() {
-            Some(diff.clamp(-1.0, 1.0))
+            AxisDir::from_sign(diff)
         } else {
-            None
+            AxisDir::Neutral
         }
     }
 

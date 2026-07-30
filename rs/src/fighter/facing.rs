@@ -8,10 +8,6 @@ pub enum FacingDirection {
 }
 
 impl FacingDirection {
-    pub const fn from_input(input: f32) -> Self {
-        if input < 0.0 { Self::Left } else { Self::Right }
-    }
-
     pub const fn to_vec(self) -> Vector2 {
         match self {
             Self::Left => Vector2::LEFT,

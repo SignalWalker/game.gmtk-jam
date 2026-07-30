@@ -1,6 +1,4 @@
-use godot::classes::class_macros::private::virtuals::ZipReader::real;
-
-use crate::fighter::{FacingDirection, Fighter2D};
+use crate::fighter::Fighter2D;
 
 mod movement;
 pub use movement::*;
@@ -11,10 +9,13 @@ pub use player::*;
 mod ai;
 pub use ai::*;
 
+mod device_map;
+pub use device_map::*;
+
 pub trait FighterController {
     fn preprocess(&mut self, fighter: &Fighter2D);
 
-    fn current_horizontal(&self, fighter: &Fighter2D) -> Option<real>;
+    fn current_horizontal(&self, fighter: &Fighter2D) -> AxisDir;
     fn consume_action(&mut self, fighter: &Fighter2D) -> Option<Action>;
     fn peek_action(&self, fighter: &Fighter2D) -> Option<Action>;
     fn should_maintain_jump(&self, fighter: &Fighter2D) -> bool;

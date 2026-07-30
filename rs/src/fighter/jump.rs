@@ -1,6 +1,6 @@
 use crate::{
     fighter::{Fighter2D, FighterState},
-    input::Action,
+    input::{Action, AxisDir},
 };
 
 impl Fighter2D {
@@ -16,9 +16,7 @@ impl Fighter2D {
 
     pub(super) fn process_jumping(&mut self, delta: f64) {
         let move_input = self.get_horizontal_input();
-        if let Some(input) = move_input {
-            self.update_facing(input);
-        }
+        self.update_facing(move_input);
 
         #[allow(clippy::single_match)]
         match self.peek_action() {
@@ -37,7 +35,7 @@ impl Fighter2D {
             Some(Action::Dash) =>
             {
                 #[allow(clippy::collapsible_match)]
-                if self.jumps_remaining >= 1 && move_input.is_some() {
+                if self.jumps_remaining >= 1 && move_input != AxisDir::Neutral {
                     self.consume_action();
                     self.enter_airdash();
                     self.process_airdash(delta);
@@ -82,9 +80,7 @@ impl Fighter2D {
 
     pub(super) fn process_airjumping(&mut self, delta: f64) {
         let move_input = self.get_horizontal_input();
-        if let Some(input) = move_input {
-            self.update_facing(input);
-        }
+        self.update_facing(move_input);
 
         #[allow(clippy::single_match)]
         match self.peek_action() {
@@ -103,7 +99,7 @@ impl Fighter2D {
             Some(Action::Dash) =>
             {
                 #[allow(clippy::collapsible_match)]
-                if self.jumps_remaining >= 1 && move_input.is_some() {
+                if self.jumps_remaining >= 1 && move_input != AxisDir::Neutral {
                     self.consume_action();
                     self.enter_airdash();
                     self.process_airdash(delta);
@@ -139,9 +135,7 @@ impl Fighter2D {
 
     pub(super) fn process_falling(&mut self, delta: f64) {
         let move_input = self.get_horizontal_input();
-        if let Some(input) = move_input {
-            self.update_facing(input);
-        }
+        self.update_facing(move_input);
 
         match self.peek_action() {
             Some(Action::AttackLight) => {
@@ -157,7 +151,7 @@ impl Fighter2D {
                 return;
             }
             Some(Action::Dash) => {
-                if self.jumps_remaining >= 1 && move_input.is_some() {
+                if self.jumps_remaining >= 1 && move_input != AxisDir::Neutral {
                     self.consume_action();
                     self.enter_airdash();
                     self.process_airdash(delta);

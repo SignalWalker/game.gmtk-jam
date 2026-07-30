@@ -1,9 +1,6 @@
-use godot::{
-    classes::{
-        Input,
-        class_macros::private::virtuals::ZipReader::{Vector2, real},
-    },
-    obj::Singleton as _,
+use godot::classes::{
+    Input,
+    class_macros::private::virtuals::ZipReader::{Vector2, real},
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
@@ -15,14 +12,22 @@ pub enum AxisDir {
 }
 
 impl AxisDir {
-    fn capture(input: &Input, negative: &str, positive: &str) -> Self {
-        match (
-            input.is_action_pressed(negative),
-            input.is_action_pressed(positive),
-        ) {
-            (false, false) | (true, true) => Self::Neutral,
-            (true, false) => Self::Negative,
-            (false, true) => Self::Positive,
+    fn capture(input: &Input, deadzone: real, negative: &str, positive: &str) -> Self {
+        let strength = input.get_axis(negative, positive);
+        if strength.abs() <= deadzone.abs() {
+            Self::Neutral
+        } else if deadzone.is_sign_positive() {
+            Self::Positive
+        } else {
+            Self::Negative
+        }
+    }
+
+    pub const fn from_sign(val: f32) -> Self {
+        if val.is_sign_positive() {
+            Self::Positive
+        } else {
+            Self::Negative
         }
     }
 
@@ -31,6 +36,14 @@ impl AxisDir {
             Self::Positive => 1.0,
             Self::Neutral => 0.0,
             Self::Negative => -1.0,
+        }
+    }
+
+    pub const fn with_magnitude(self, mag: real) -> real {
+        match self {
+            Self::Positive => mag,
+            Self::Neutral => 0.0,
+            Self::Negative => -mag,
         }
     }
 
@@ -54,12 +67,52 @@ impl MovementFrame {
         horizontal: AxisDir::Neutral,
     };
 
-    pub fn capture(left: &str, right: &str, up: &str, down: &str) -> Self {
-        let input = Input::singleton();
-        Self {
-            vertical: AxisDir::capture(&input, down, up),
-            horizontal: AxisDir::capture(&input, left, right),
+    pub fn from_vector(deadzone: real, mut vec: Vector2) -> Option<Self> {
+        use std::f32::consts::FRAC_PI_2;
+        const FRAC_PI_16: f32 = std::f32::consts::FRAC_PI_8 / 2.0;
+
+        let len = vec.length();
+        if len <= deadzone.abs() {
+            return None;
         }
+
+        // normalize
+        vec /= len;
+
+        // angle:
+        // - +0 -> +pi/2: up right
+        // - +pi/2 -> +pi: up left
+        // - -0 -> -pi/2: down right
+        // - -pi/2 -> -pi: down left
+        let angle = vec.y.atan2(vec.x);
+        // okay so imagine the above angle on a circle and then:
+        // 1. fold it in half across the X axis
+        // 2. rotate it clockwise pi/2 radians so it's halfway across the x axis again
+        // 3. fold it in half across the X axis again so it's just the upper right quadrant now
+        // 4. horizontally neutral angles are now pi/16 or less
+        let fourth = (angle.abs() - FRAC_PI_2).abs();
+        let horizontal = if fourth <= FRAC_PI_16 {
+            AxisDir::Neutral
+        } else if angle.abs() < FRAC_PI_2 {
+            AxisDir::Positive
+        } else {
+            AxisDir::Negative
+        };
+
+        // the same trick as above but we rotate it counterclockwise and fold it a third time
+        // so that values <= pi/16 are *vertically* neutral
+        let vertical = if (fourth - FRAC_PI_2).abs() <= FRAC_PI_16 {
+            AxisDir::Neutral
+        } else if angle.is_sign_positive() {
+            AxisDir::Positive
+        } else {
+            AxisDir::Negative
+        };
+
+        Some(MovementFrame {
+            horizontal,
+            vertical,
+        })
     }
 
     pub const fn to_unit_vector(self) -> Option<Vector2> {
@@ -75,28 +128,5 @@ impl MovementFrame {
             (AxisDir::Negative, AxisDir::Neutral) => Some(Vector2::LEFT),
             (AxisDir::Negative, AxisDir::Negative) => Some(Vector2::new(-MU, -MU)),
         }
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Default)]
-pub struct AnalogMovementFrame(pub Vector2);
-
-impl AnalogMovementFrame {
-    pub const NEUTRAL: Self = Self(Vector2::ZERO);
-
-    pub fn capture(deadzone: real, left: &str, right: &str, up: &str, down: &str) -> Self {
-        let vec = Input::singleton()
-            .get_vector_ex(left, right, up, down)
-            .deadzone(deadzone)
-            .done();
-        if vec.length() <= deadzone {
-            Self::NEUTRAL
-        } else {
-            Self(vec)
-        }
-    }
-
-    pub fn try_normalized(self) -> Option<Vector2> {
-        self.0.try_normalized()
     }
 }
