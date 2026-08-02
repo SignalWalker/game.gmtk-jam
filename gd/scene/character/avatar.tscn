@@ -57,16 +57,38 @@
 [ext_resource type="Texture2D" uid="uid://knhbsgyxy8sv" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK8.png" id="17_451ld"]
 [ext_resource type="Texture2D" uid="uid://dre84idu3pcu2" path="res://art/character/astra/attack_air_heavy/ASTRA_AIRHEAVYATTACK00016.png" id="17_yyb5e"]
 [ext_resource type="Texture2D" uid="uid://cvf0v5a8hyisu" path="res://art/character/astra/attack_ground_light_1/ASTRA_LIGHTATTACK9.png" id="18_0kv7q"]
+[ext_resource type="Texture2D" uid="uid://c1irrrm8d8u1g" path="res://art/character/astra/attack_air_light_1/ASTRA_lightaircombo00000.png" id="18_a30st"]
+[ext_resource type="Texture2D" uid="uid://hcw2apikcqu7" path="res://art/character/astra/attack_air_light_1/ASTRA_lightaircombo00001.png" id="19_bpgkx"]
+[ext_resource type="Texture2D" uid="uid://umuf0jfqjodw" path="res://art/character/astra/attack_air_light_1/ASTRA_lightaircombo00002.png" id="20_c4rsr"]
+[ext_resource type="Texture2D" uid="uid://yaog2c7ijmxc" path="res://art/character/astra/attack_air_light_1/ASTRA_lightaircombo00003.png" id="21_alqch"]
+[ext_resource type="Texture2D" uid="uid://cw3jc5qud8hi" path="res://art/character/astra/attack_air_light_1/ASTRA_lightaircombo00004.png" id="22_72pfu"]
+[ext_resource type="Texture2D" uid="uid://68tywtyj7iy2" path="res://art/character/astra/attack_air_light_2/ASTRA_lightaircombo00005.png" id="23_a53sh"]
+[ext_resource type="Texture2D" uid="uid://cq65sc6bxkujt" path="res://art/character/astra/attack_air_light_2/ASTRA_lightaircombo00006.png" id="24_wo6m3"]
+[ext_resource type="Texture2D" uid="uid://bn683ssfejjlp" path="res://art/character/astra/attack_air_light_2/ASTRA_lightaircombo00007.png" id="25_le0ap"]
+[ext_resource type="Texture2D" uid="uid://y768tsskvnot" path="res://art/character/astra/attack_air_light_2/ASTRA_lightaircombo00008.png" id="26_eh543"]
+[ext_resource type="Texture2D" uid="uid://bo0xnrpaqw6hu" path="res://art/character/astra/attack_air_light_2/ASTRA_lightaircombo00009.png" id="27_l0xs7"]
 [ext_resource type="Texture2D" uid="uid://08c5dq6hn1bu" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK3.png" id="27_xbxo4"]
+[ext_resource type="Texture2D" uid="uid://cay8oroc13dmq" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00010.png" id="28_hgh3r"]
 [ext_resource type="Texture2D" uid="uid://be8mywtgelgbl" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK4.png" id="28_tkjuv"]
+[ext_resource type="Texture2D" uid="uid://c4gjocn6rq0e5" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00011.png" id="29_ecngt"]
 [ext_resource type="Texture2D" uid="uid://i3ay4iyy1fl7" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK5.png" id="29_iyh3h"]
 [ext_resource type="Texture2D" uid="uid://cnrjudv4avsjw" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK6.png" id="30_5jban"]
+[ext_resource type="Texture2D" uid="uid://bhpbq316wqyv8" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00012.png" id="30_q23r7"]
 [ext_resource type="Texture2D" uid="uid://dobg5uxvy1hbg" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK7.png" id="31_kl7x3"]
+[ext_resource type="Texture2D" uid="uid://cgryt1dvs41pm" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00013.png" id="31_lym7l"]
+[ext_resource type="Texture2D" uid="uid://diuk5dp4ryv0r" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00014.png" id="32_1hwip"]
 [ext_resource type="Texture2D" uid="uid://5krslmxbm0s8" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK8.png" id="32_pjsqd"]
+[ext_resource type="Texture2D" uid="uid://cr2164gpagqep" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00015.png" id="33_bml38"]
 [ext_resource type="Texture2D" uid="uid://dqmgchmcmhymo" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK9.png" id="33_p54o7"]
+[ext_resource type="Texture2D" uid="uid://bcqoixy13133m" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00016.png" id="34_hw53c"]
 [ext_resource type="Texture2D" uid="uid://dwekt60j2ljmd" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK10.png" id="34_rmeh5"]
 [ext_resource type="Texture2D" uid="uid://bencx6c0irb7q" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK11.png" id="35_u07xs"]
+[ext_resource type="Texture2D" uid="uid://b7g8qv5o1easo" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00017.png" id="35_y3p1t"]
 [ext_resource type="Texture2D" uid="uid://ixdw4kbgkv7" path="res://art/character/astra/attack_ground_light_3/ASTRA_LIGHTATTACK12.png" id="36_h2ejc"]
+[ext_resource type="Texture2D" uid="uid://dhedjuk65ljqv" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00018.png" id="36_sl0f3"]
+[ext_resource type="Texture2D" uid="uid://dyotkjsavgv0n" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00019.png" id="37_y42ge"]
+[ext_resource type="Texture2D" uid="uid://ey0ugiowan14" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00020.png" id="38_l7od8"]
+[ext_resource type="Texture2D" uid="uid://pphtdegv2amk" path="res://art/character/astra/attack_air_light_3/ASTRA_lightaircombo00021.png" id="39_lignj"]
 [ext_resource type="AudioStream" uid="uid://crp71g0fidgas" path="res://sound/attack/half-life-crowbar.mp3" id="52_suxyw"]
 
 [sub_resource type="Animation" id="Animation_uwhti"]
@@ -273,7 +295,53 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id="Animation_yyb5e"]
 resource_name = "attack_air_light_1"
+length = 0.41666666
 step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("18_a30st"), ExtResource("19_bpgkx"), ExtResource("20_c4rsr"), ExtResource("21_alqch"), ExtResource("22_72pfu")]
+}
+
+[sub_resource type="Animation" id="Animation_72pfu"]
+resource_name = "attack_air_light_2"
+length = 0.41666666
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("23_a53sh"), ExtResource("24_wo6m3"), ExtResource("25_le0ap"), ExtResource("26_eh543"), ExtResource("27_l0xs7")]
+}
+
+[sub_resource type="Animation" id="Animation_l0xs7"]
+resource_name = "attack_air_light_3"
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334, 0.4166667, 0.5, 0.5833334, 0.6666667, 0.75, 0.8333334, 0.9166667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("28_hgh3r"), ExtResource("29_ecngt"), ExtResource("30_q23r7"), ExtResource("31_lym7l"), ExtResource("32_1hwip"), ExtResource("33_bml38"), ExtResource("34_hw53c"), ExtResource("35_y3p1t"), ExtResource("36_sl0f3"), ExtResource("37_y42ge"), ExtResource("38_l7od8"), ExtResource("39_lignj")]
+}
 
 [sub_resource type="Animation" id="Animation_piawc"]
 resource_name = "attack_ground_heavy"
@@ -713,6 +781,8 @@ _data = {
 &"RESET": SubResource("Animation_uwhti"),
 &"attack_air_heavy": SubResource("Animation_suxyw"),
 &"attack_air_light_1": SubResource("Animation_yyb5e"),
+&"attack_air_light_2": SubResource("Animation_72pfu"),
+&"attack_air_light_3": SubResource("Animation_l0xs7"),
 &"attack_ground_heavy": SubResource("Animation_piawc"),
 &"attack_ground_light_1": SubResource("Animation_3cpxv"),
 &"attack_ground_light_2": SubResource("Animation_0kv7q"),
