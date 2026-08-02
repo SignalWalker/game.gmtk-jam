@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+GlobalState="*uid://l230tmhi64ny"
 RootManager="*uid://c0iavqf0ik1v5"
 
 [display]

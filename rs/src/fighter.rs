@@ -24,8 +24,13 @@ mod util;
 // states
 mod attack_air_heavy;
 mod attack_air_light;
+mod attack_dive_kick;
 mod attack_ground_heavy;
 mod attack_ground_light;
+mod attack_helm_breaker;
+mod attack_launcher;
+mod attack_rising_slash;
+mod attack_stinger;
 mod dash;
 mod ground;
 mod hitstun;
@@ -237,11 +242,11 @@ impl ICharacterBody2D for Fighter2D {
             FighterState::AttackAirLight3 => self.process_attack_air_light_3(delta),
             FighterState::AttackAirHeavy => self.process_attack_air_heavy(delta),
             // commands
-            FighterState::AttackLauncher => todo!(),
-            FighterState::AttackStinger => todo!(),
-            FighterState::AttackRisingSlash => todo!(),
-            FighterState::AttackDivekick => todo!(),
-            FighterState::AttackHelmBreaker => todo!(),
+            FighterState::AttackLauncher => self.process_attack_launcher(delta),
+            FighterState::AttackStinger => self.process_attack_stinger(delta),
+            FighterState::AttackRisingSlash => self.process_attack_rising_slash(delta),
+            FighterState::AttackDivekick => self.process_attack_dive_kick(delta),
+            FighterState::AttackHelmBreaker => self.process_attack_helm_breaker(delta),
         }
 
         self.iframes_remaining = self.iframes_remaining.saturating_sub(1);

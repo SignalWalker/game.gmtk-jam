@@ -128,6 +128,7 @@ impl Fighter2D {
     pub(super) fn apply_movement_for_aerial_attack(&mut self, delta: f64) -> bool {
         let mut collided = false;
         if !self.attack_contact {
+            self.apply_walk_input_preserving();
             self.apply_gravity(delta);
             collided = self.move_and_slide();
             self.apply_air_damping();

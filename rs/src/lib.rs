@@ -12,3 +12,7 @@ pub mod fighter;
 pub mod attack;
 
 pub mod input;
+
+pub mod state;
+
+pub mod gui;

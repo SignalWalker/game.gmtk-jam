@@ -1,5 +1,13 @@
 [gd_scene format=3 uid="uid://phcufdpflker"]
 
+[sub_resource type="GDScript" id="GDScript_31fdn"]
+resource_name = "title_screen"
+script/source = "extends MarginContainer
+
+func _ready() -> void:
+	GlobalState.started_game_normally = true
+"
+
 [sub_resource type="GDScript" id="GDScript_8j5lb"]
 resource_name = "start_button"
 script/source = "extends Button
@@ -13,17 +21,36 @@ func _ready() -> void:
 	self.grab_focus.call_deferred()
 "
 
+[sub_resource type="GDScript" id="GDScript_kr8i1"]
+resource_name = "versus_button"
+script/source = "extends Button
+
+func _enter_tree() -> void:
+	self.pressed.connect(func() -> void:
+		SceneStack.get_nearest(self).swap_scene(SceneStack.load_to_node(&\"uid://di5n43kwngty4\"))
+	)
+"
+
 [node name="TitleScreen" type="MarginContainer" unique_id=144219434]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = SubResource("GDScript_31fdn")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=725407469]
 layout_mode = 2
 
-[node name="Start" type="Button" parent="CenterContainer" unique_id=1636306707]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=609756111]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1636306707]
 layout_mode = 2
 text = "Start"
 script = SubResource("GDScript_8j5lb")
+
+[node name="Versus" type="Button" parent="CenterContainer/VBoxContainer" unique_id=249874253]
+layout_mode = 2
+text = "Versus"
+script = SubResource("GDScript_kr8i1")

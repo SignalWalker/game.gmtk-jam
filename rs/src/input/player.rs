@@ -1,15 +1,15 @@
-use std::collections::{HashSet, VecDeque};
+use std::collections::VecDeque;
 
 use godot::{
-    classes::{Input, InputEvent},
-    obj::{Singleton as _, WithBaseField as _},
+    classes::{Input, InputEvent, class_macros::private::virtuals::Xrvrs::Gd},
+    obj::{NewAlloc as _, Singleton as _, WithBaseField as _},
     prelude::{Base, GodotClass, INode, Node, godot_api, godot_dyn},
 };
 use godot_utils::ArrayExt;
 
 use crate::{
     fighter::{FacingDirection, Fighter2D},
-    input::{Action, AxisDir, FighterController, InputAction, InputMixer, MovementFrame},
+    input::{Action, AxisDir, FighterController, InputAction, InputChannel, MovementFrame},
 };
 
 pub const AVATAR_UP: &str = "avatar_move_up";
@@ -80,15 +80,9 @@ pub struct FighterControllerPlayer {
 
     pub maintaining_jump: bool,
 
-    frame_count: u64,
-
     action: Option<QueuedAction>,
 
-    input: Option<InputMixer>,
-
-    action_dash: &'static str,
-    action_attack_light: &'static str,
-    action_attack_heavy: &'static str,
+    input: Option<InputChannel>,
 }
 
 #[godot_dyn]
@@ -121,6 +115,12 @@ impl FighterController for FighterControllerPlayer {
 }
 
 impl FighterControllerPlayer {
+    pub fn with_input_channel(mixer: InputChannel) -> Gd<Self> {
+        let mut res = Self::new_alloc();
+        res.bind_mut().input = Some(mixer);
+        res
+    }
+
     pub fn current_horizontal(&self) -> AxisDir {
         self.movement_buffer
             .front()
@@ -184,12 +184,24 @@ impl FighterControllerPlayer {
     fn get_dominant_action(&self) -> Option<Action> {
         self.input
             .as_ref()
-            .and_then(InputMixer::get_dominant_action)
+            .and_then(InputChannel::get_dominant_action)
     }
 }
 
 #[godot_api]
 impl FighterControllerPlayer {
+    #[func]
+    fn new_with_input_channel(channel: u32) -> Gd<Self> {
+        Self::with_input_channel(InputChannel::new(channel.saturating_cast()))
+    }
+
+    #[func]
+    pub fn register_input_device(&self, device: i32) {
+        if let Some(input) = self.input.as_ref() {
+            input.register_device(device);
+        }
+    }
+
     #[func]
     pub fn set_movement_buffer_len(&mut self, len: u32) {
         self.movement_buffer_len = len;
@@ -224,7 +236,8 @@ impl INode for FighterControllerPlayer {
         {
             p.bind_mut().register_controller(self.to_gd());
 
-            if self.input.is_none()
+            if !crate::state::started_game_normally()
+                && self.input.is_none()
                 && let Some(p) = p.get_parent()
             {
                 let self_id = self.base().instance_id();
@@ -245,8 +258,7 @@ impl INode for FighterControllerPlayer {
                 }
 
                 tracing::trace!(index = mixer_index, name = %self.base().get_name(), "register fighter controller mixer");
-                let mixer = InputMixer::new(mixer_index);
-                mixer.register();
+                let mixer = InputChannel::new(mixer_index);
                 match mixer_index {
                     0 => mixer.register_device(0),
                     1 => {

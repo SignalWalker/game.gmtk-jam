@@ -4,20 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://bm50437gah4kg" path="res://art/bg/moon.png" id="2_lvrkv"]
 [ext_resource type="PackedScene" uid="uid://b15d0or3erbra" path="res://scene/character/avatar.tscn" id="2_naxgx"]
 
-[sub_resource type="GDScript" id="GDScript_gnh3c"]
-resource_name = "training"
-script/source = "extends Node2D
-
-func _input(event: InputEvent) -> void:
-	if event is InputEventJoypadMotion:
-		return
-	
-	if event.is_action_pressed(&\"avatar_jump_0\"):
-		print(\"avatar_jump_0 :: {1}\".format([event.as_text(), event.device]))
-	if event.is_action_pressed(&\"avatar_jump_1\"):
-		print(\"avatar_jump_1 :: {1}\".format([event.as_text(), event.device]))
-"
-
 [sub_resource type="GDScript" id="GDScript_lvrkv"]
 resource_name = "state_debug"
 script/source = "extends VBoxContainer
@@ -64,7 +50,6 @@ normal = Vector2(1, 0)
 normal = Vector2(-1, 0)
 
 [node name="Training" type="Node2D" unique_id=134973433]
-script = SubResource("GDScript_gnh3c")
 metadata/_edit_lock_ = true
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=40750586]
@@ -109,13 +94,6 @@ metadata/_edit_lock_ = true
 
 [node name="FighterControllerPlayer" type="FighterControllerPlayer" parent="Avatar" unique_id=967211163]
 
-[node name="Label" type="Label" parent="Avatar" unique_id=1909006963]
-offset_left = -12.0
-offset_top = -75.0
-offset_right = 28.0
-offset_bottom = -52.0
-text = "P1"
-
 [node name="Floor" type="StaticBody2D" parent="." unique_id=2070460119]
 position = Vector2(0, 450)
 metadata/_edit_group_ = true
@@ -143,11 +121,4 @@ shape = SubResource("WorldBoundaryShape2D_gnh3c")
 [node name="Enemy" parent="." unique_id=1784894730 instance=ExtResource("2_naxgx")]
 position = Vector2(350, 395)
 
-[node name="FighterControllerEnemy" type="FighterControllerPlayer" parent="Enemy" unique_id=5434574]
-
-[node name="Label" type="Label" parent="Enemy" unique_id=1035675954]
-offset_left = -10.0
-offset_top = -70.0
-offset_right = 30.0
-offset_bottom = -47.0
-text = "P2"
+[node name="FighterControllerAi" type="FighterControllerAi" parent="Enemy" unique_id=1968225106]

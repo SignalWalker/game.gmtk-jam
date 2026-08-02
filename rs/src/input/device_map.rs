@@ -60,23 +60,26 @@ impl InputAction {
     }
 }
 
-pub struct InputMixer {
+pub struct InputChannel {
     index: usize,
     action_names: HashMap<InputAction, StringName>,
 }
 
-impl InputMixer {
+impl InputChannel {
     pub fn new(index: usize) -> Self {
-        Self {
+        let res = Self {
             index,
             action_names: InputAction::build_map(index),
-        }
+        };
+        res.register();
+        res
     }
 
-    pub fn register(&self) {
+    fn register(&self) {
         tracing::trace!(index = self.index, "register input mixer");
         let mut map = InputMap::singleton();
         for (action, name) in &self.action_names {
+            tracing::trace!(%name, "register action");
             let dz = map.action_get_deadzone(action.get_default_name());
             map.add_action_ex(name).deadzone(dz).done();
         }
@@ -86,6 +89,9 @@ impl InputMixer {
         const JOYPAD_UNIVERSAL: i32 = -1;
         const fn device_is_joypad(device: i32) -> bool {
             device != InputEvent::DEVICE_ID_KEYBOARD && device != InputEvent::DEVICE_ID_MOUSE
+        }
+        const fn device_matches_event(event: i32, device: i32) -> bool {
+            event == device || (device_is_joypad(device) && event == JOYPAD_UNIVERSAL)
         }
 
         tracing::trace!(index = self.index, device, "register input mixer device");
@@ -97,12 +103,11 @@ impl InputMixer {
                 let mut evdev = event.get_device();
                 if event.is_dynamic_class(InputEventKey::class_id()) {
                     evdev = InputEvent::DEVICE_ID_KEYBOARD;
-                }
-                if event.is_dynamic_class(InputEventMouse::class_id()) {
+                } else if event.is_dynamic_class(InputEventMouse::class_id()) {
                     evdev = InputEvent::DEVICE_ID_MOUSE;
                 }
 
-                if evdev != device && !(device_is_joypad(device) && evdev == JOYPAD_UNIVERSAL) {
+                if !device_matches_event(evdev, device) {
                     continue;
                 }
 
